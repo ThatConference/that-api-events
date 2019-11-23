@@ -1,5 +1,4 @@
 type Milestone @key(fields: "id") {
-  id: ID!
   title: String!
   description: String
   dueDate: Date
