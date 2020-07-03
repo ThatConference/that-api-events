@@ -31,14 +31,18 @@ const session = dbInstance => {
     const doc = await docRef.get();
     const currentSession = doc.data();
 
-    if (currentSession.eventId !== eventId) {
-      return null;
+    if (
+      currentSession.eventId === eventId &&
+      currentSession.status &&
+      ['ACCEPTED', 'SCHEDULED', 'CANCELLED'].includes(currentSession.status)
+    ) {
+      return {
+        id: doc.id,
+        ...currentSession,
+      };
     }
 
-    return {
-      id: doc.id,
-      ...currentSession,
-    };
+    return null;
   }
 
   async function findApprovedBySlug(eventId, slug) {
