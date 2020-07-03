@@ -45,9 +45,6 @@ type Event @key(fields: "id") {
   "The list of partners for a given event"
   partners: [Partner]
 
-  "A single session for an event by slug"
-  session(slug: Slug!): AcceptedSession
-
   "The list of partners for a given event"
   sessions: [AcceptedSession]
 

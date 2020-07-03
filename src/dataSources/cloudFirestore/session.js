@@ -50,7 +50,7 @@ const session = dbInstance => {
       .get();
 
     let result = null;
-
+    dlog('snap size', docSnap.size);
     if (docSnap.size === 1) {
       result = docSnap.docs[0].data();
       result.id = docSnap.docs[0].id;

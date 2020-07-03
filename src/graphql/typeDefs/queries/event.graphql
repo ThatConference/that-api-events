@@ -2,4 +2,5 @@ type EventQuery {
   get: Event
   partners: EventPartnersQuery!
   sessionById(sessionId: ID!): AcceptedSession
+  sessionBySlug(slug: String!): AcceptedSession
 }
