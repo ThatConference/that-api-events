@@ -19,6 +19,14 @@ export const fieldResolvers = {
       dlog('EventQuery.partners');
       return { eventId };
     },
+    sessionById: (
+      { eventId },
+      { sessionId },
+      { dataSources: { firestore } },
+    ) => {
+      dlog('EventQuery sessionById called');
+      return sessionStore(firestore).findApprovedById(eventId, sessionId);
+    },
   },
   Event: {
     notifications: notificationResolver.notifications,
