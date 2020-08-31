@@ -1,0 +1,22 @@
+type CommunityStats @key(fields: "id") {
+  "Total number of members associated with community"
+  totalMembers: Int
+
+  "Total number of activities associated with this community"
+  totalActivities: Int
+
+  "Total number of activities which have already happened for this community"
+  pastActivities: Int
+
+  "Total number of activities coming up for this community"
+  upcomingActivities: Int
+
+  "Total hours of activities for this community. Floor value returned"
+  hoursServed: Int
+
+  "Total minutes of activities for this community. Defaulted to 30 minutes"
+  minutesServed: Int
+
+  "Total number of events associated with this community"
+  totalEvents: Int
+}

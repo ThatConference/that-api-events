@@ -4,4 +4,7 @@ type CommunitiesQuery {
 
   "All events by community, active or not, but is featured"
   all: [Event]
+
+  "Events on a community including all associated events"
+  stats: CommunityStats
 }

@@ -26,6 +26,33 @@ const session = dbInstance => {
     return results;
   }
 
+  async function findAllAcceptedByEventId(eventId) {
+    dlog('findAll accpepted');
+    const { docs } = await sessionsCollections
+      .where('eventId', '==', eventId)
+      .where('status', '==', 'ACCEPTED')
+      .orderBy('startTime')
+      .select('eventId', 'durationInMinutes', 'startTime')
+      .get();
+
+    const results = docs.map(d => ({
+      id: d.id,
+      ...d.data(),
+    }));
+
+    return results;
+  }
+
+  async function findAllAcceptedByEventIdBatch(eventIds) {
+    dlog('findAll accpeted batch, %o', eventIds);
+    if (eventIds.length < 1) {
+      dlog('eventIds must be and array!!');
+      return null;
+    }
+    const sessRefs = eventIds.map(e => findAllAcceptedByEventId(e));
+    return Promise.all(sessRefs);
+  }
+
   async function findAllApprovedByEventIdAtDate(eventId, atDate, daysAfter) {
     dlog(
       'findAllApprovedByEventIdAtDate(eventId, atDate, daysAfter)',
@@ -107,6 +134,8 @@ const session = dbInstance => {
 
   return {
     findAllApprovedByEventId,
+    findAllAcceptedByEventId,
+    findAllAcceptedByEventIdBatch,
     findAllApprovedByEventIdAtDate,
     findApprovedById,
     findApprovedBySlug,
