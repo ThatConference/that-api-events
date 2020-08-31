@@ -1,4 +1,4 @@
-type CommunityStats @key(fields: "id") {
+type CommunityStats {
   "Total number of members associated with community"
   totalMembers: Int
 

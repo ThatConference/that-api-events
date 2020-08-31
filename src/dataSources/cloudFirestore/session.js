@@ -45,7 +45,7 @@ const session = dbInstance => {
 
   async function findAllAcceptedByEventIdBatch(eventIds) {
     dlog('findAll accpeted batch, %o', eventIds);
-    if (eventIds.length < 1) {
+    if (!eventIds.length) {
       dlog('eventIds must be and array!!');
       return null;
     }

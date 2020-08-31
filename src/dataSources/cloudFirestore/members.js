@@ -1,5 +1,4 @@
 import debug from 'debug';
-import * as Sentry from '@sentry/node';
 
 const dlog = debug('that:api:events:datasources:firebase:members');
 
