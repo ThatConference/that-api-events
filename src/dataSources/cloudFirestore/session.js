@@ -77,7 +77,12 @@ const session = dbInstance => {
 
       if (hoursAfter && hoursAfter > 0) {
         // 60 * 60 * 1000 = 3,600,000
-        const todate = new Date(fromdate.getTime() + hoursAfter * 3600000);
+        // -60000 to remove one minute, because:
+        // 1:00 to 2:00 is 61 total minutes
+        // 1:00 to 1:59 is 60 total minutes
+        const todate = new Date(
+          fromdate.getTime() + (hoursAfter * 3600000 - 60000),
+        );
         dlog('todate', todate);
         query = query.where('startTime', '<=', todate);
       }
