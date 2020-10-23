@@ -2,4 +2,6 @@ type CommunityMutation {
   "Update a community's data"
   update(community: CommunityUpdateInput!): Community!
     @auth(requires: "communities")
+  "Change community slug"
+  changeSlug(newSlug: Slug!): Community
 }

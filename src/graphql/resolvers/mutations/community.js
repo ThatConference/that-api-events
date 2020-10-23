@@ -17,5 +17,18 @@ export const fieldResolvers = {
         user,
       });
     },
+
+    changeSlug: (
+      { communityId },
+      { newSlug },
+      { dataSources: { firestore }, user },
+    ) => {
+      dlog('changeSlug called');
+      return communityStore(firestore).changeSlug({
+        communityId,
+        newSlug,
+        user,
+      });
+    },
   },
 };
