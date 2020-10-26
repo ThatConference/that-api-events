@@ -1,8 +1,13 @@
 import debug from 'debug';
+import * as Sentry from '@sentry/node';
+import { dataSources, utility } from '@thatconference/api';
 
 const dlog = debug('that:api:events:datasources:firebase:community');
+const slugStore = dataSources.cloudFirestore.slug;
+const communityDateForge = utility.firestoreDateForge.communities;
 
 const communityColName = 'communities';
+const slugType = 'community';
 
 function scrubCommunity({ community, user, isNew }) {
   const scrubbedCommunity = community;
@@ -28,19 +33,19 @@ const community = dbInstance => {
     dlog('getAll');
     const { docs } = await communityCol.get();
 
-    return docs.map(cm => ({
-      id: cm.id,
-      ...cm.data(),
-    }));
+    return docs.map(cm => {
+      const result = { id: cm.id, ...cm.data() };
+      return communityDateForge(result);
+    });
   }
 
   async function getAllActive() {
     const { docs } = await communityCol.where('status', '==', 'ACTIVE').get();
 
-    return docs.map(cm => ({
-      id: cm.id,
-      ...cm.data(),
-    }));
+    return docs.map(cm => {
+      const result = { id: cm.id, ...cm.data() };
+      return communityDateForge(result);
+    });
   }
 
   async function get(id) {
@@ -54,6 +59,7 @@ const community = dbInstance => {
         id: doc.id,
         ...doc.data(),
       };
+      result = communityDateForge(result);
     }
 
     return result;
@@ -119,6 +125,7 @@ const community = dbInstance => {
         id: d.id,
         ...d.data(),
       };
+      result = communityDateForge(result);
     } else if (size > 1) {
       throw new Error(`Multiple Community slugs found for slug ${slimslug}`);
     }
@@ -126,17 +133,65 @@ const community = dbInstance => {
     return result;
   }
 
-  async function isSlugTaken(slug) {
-    dlog('isSlugTaken? %s', slug);
-    const { size } = await communityCol
-      .where('slug', '==', slug)
-      .select()
-      .get();
-
-    return size > 0;
+  function isSlugTaken(slug) {
+    dlog('isSlugTaken called %s', slug);
+    return slugStore(dbInstance).isSlugTaken(slug);
   }
 
   async function create({ newCommunity, user }) {
+    dlog('create new community with slug %s', newCommunity.slug);
+    const cleanCommunity = scrubCommunity({
+      community: newCommunity,
+      isNew: true,
+      user,
+    });
+    const newSlug = cleanCommunity.slug;
+    const slugInUse = await isSlugTaken(newSlug);
+    if (slugInUse)
+      throw new Error(
+        'Slug in use, it cannot be used to create a new community',
+      );
+
+    const communityDocRef = communityCol.doc(); // creates a random id
+    dlog('new community id %s');
+    const slugDocRef = slugStore(dbInstance).getSlugDocRef(newSlug);
+    const slugDoc = slugStore(dbInstance).makeSlugDoc({
+      slugName: newSlug,
+      type: slugType,
+      referenceId: communityDocRef.id,
+    });
+    slugDoc.createdAt = cleanCommunity.createdAt;
+
+    const writeBatch = dbInstance.batch();
+    writeBatch.create(communityDocRef, cleanCommunity);
+    writeBatch.create(slugDocRef, slugDoc);
+    let writeResult;
+    try {
+      writeResult = await writeBatch.commit();
+    } catch (err) {
+      dlog('failed batch write create community and slug');
+      Sentry.withScope(scope => {
+        scope.setLevel('error');
+        scope.setContext(
+          'failed batch write create community and slug',
+          { communityDocRef, cleanCommunity },
+          { slugDocRef, slugDoc },
+          { user: user.sub },
+        );
+        Sentry.captureException(err);
+      });
+      throw new Error('failed batch write create community and slug');
+    }
+    dlog('writeResult %o', writeResult);
+    const out = {
+      id: communityDocRef.id,
+      ...cleanCommunity,
+    };
+
+    return communityDateForge(out);
+  }
+
+  async function createLocal({ newCommunity, user }) {
     dlog('create new community with slug %s', newCommunity.slug);
     const slugCheck = await isSlugTaken(newCommunity.slug);
     if (slugCheck)
@@ -167,11 +222,67 @@ const community = dbInstance => {
     });
 
     await communityDocRef.update(moddedCommunity);
-    const updatedDoc = await communityDocRef.get();
-    return {
-      id: updatedDoc.id,
-      ...updatedDoc.data(),
-    };
+
+    return get(communityDocRef.id);
+  }
+
+  async function changeSlug({ communityId, newSlug, user }) {
+    dlog(
+      'change community slug called for: %s, newSlug: %s',
+      communityId,
+      newSlug,
+    );
+    const isNewInUse = await slugStore(dbInstance).isSlugTaken(newSlug);
+    if (isNewInUse)
+      throw new Error(
+        'unable to change communuity slug, new slug in use already',
+      );
+    const communityDocRef = communityCol.doc(communityId);
+    const docSnapshot = await communityDocRef.get();
+    if (!docSnapshot.exists)
+      throw new Error(
+        'invalid communityId provided, unable to change community slug',
+      );
+    const cleanCommunity = scrubCommunity({
+      community: {
+        slug: newSlug,
+      },
+      user,
+    });
+    const currentSlug = docSnapshot.get('slug');
+    const currentSlugDocRef = slugStore(dbInstance).getSlugDocRef(currentSlug);
+    const newSlugDocRef = slugStore(dbInstance).getSlugDocRef(newSlug);
+    const newSlugDoc = slugStore(dbInstance).makeSlugDoc({
+      slugName: newSlug,
+      type: slugType,
+      referenceId: communityDocRef.id,
+    });
+    newSlugDoc.createdAt = cleanCommunity.lastUpdatedAt;
+
+    const writeBatch = dbInstance.batch();
+    writeBatch.delete(currentSlugDocRef);
+    writeBatch.update(communityDocRef, cleanCommunity);
+    writeBatch.create(newSlugDocRef, newSlugDoc);
+    let writeResult;
+    try {
+      writeResult = await writeBatch.commit();
+    } catch (err) {
+      dlog('failed batch write change community slug');
+      Sentry.withScope(scope => {
+        scope.setLevel('error');
+        scope.setContext(
+          'failed batch write change community slug',
+          { communityDocRef, cleanCommunity },
+          { newSlugDocRef, newSlugDoc },
+          { user: user.sub },
+        );
+        Sentry.captureException(err);
+      });
+      throw new Error('failed batch write change community slug');
+    }
+    dlog('writeResult %o', writeResult);
+
+    return get(communityDocRef.id);
   }
 
   return {
@@ -185,6 +296,7 @@ const community = dbInstance => {
     findBySlug,
     create,
     update,
+    changeSlug,
   };
 };
 
