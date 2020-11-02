@@ -9,6 +9,8 @@ import slackDigest from '../../../lib/slack/slackDigest';
 
 const favoriteStore = dataSources.cloudFirestore.favorites;
 const favoriteType = 'community';
+const assetStore = dataSources.cloudFirestore.assets;
+const entityType = 'COMMUNITY';
 const dlog = debug('that:api:community:query');
 
 export const fieldResolvers = {
@@ -216,6 +218,14 @@ export const fieldResolvers = {
         favoriteType,
         pageSize,
         cursor,
+      });
+    },
+
+    assets: ({ id: entityId }, __, { dataSources: { firestore } }) => {
+      dlog('assets for community called');
+      return assetStore(firestore).findEntityAssets({
+        entityId,
+        entityType,
       });
     },
     moderators: () => {},

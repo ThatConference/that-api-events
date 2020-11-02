@@ -58,4 +58,7 @@ type Community @key(fields: "id") {
 
   "Members with public profile following/favoriting community Defaults: pageSize: 20"
   followers(pageSize: Int, cursor: String): PagedMember
+
+  "asets assigned to this Community"
+  assets: [Asset]
 }

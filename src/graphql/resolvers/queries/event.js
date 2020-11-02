@@ -10,6 +10,8 @@ import milestoneResolver from './milestone';
 
 const favoriteStore = dataSources.cloudFirestore.favorites;
 const favoriteType = 'event';
+const assetStore = dataSources.cloudFirestore.assets;
+const entityType = 'EVENT';
 const dlog = debug('that:api:event:query');
 
 export const fieldResolvers = {
@@ -117,6 +119,13 @@ export const fieldResolvers = {
         favoriteType,
         pageSize,
         cursor,
+      });
+    },
+    assets: ({ id: entityId }, __, { dataSources: { firestore } }) => {
+      dlog('assets for event called');
+      return assetStore(firestore).findEntityAssets({
+        entityId,
+        entityType,
       });
     },
   },
