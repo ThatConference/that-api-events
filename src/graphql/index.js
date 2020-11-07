@@ -8,12 +8,15 @@ import {
 import { buildFederatedSchema } from '@apollo/federation';
 import debug from 'debug';
 import { security, graph } from '@thatconference/api';
+import DataLoader from 'dataloader';
 import * as Sentry from '@sentry/node';
 
 // Graph Types and Resolvers
 import typeDefsRaw from './typeDefs';
 import resolvers from './resolvers';
 import directives from './directives';
+import eventStore from '../dataSources/cloudFirestore/event';
+import communityStore from '../dataSources/cloudFirestore/community';
 
 const dlog = debug('that:api:events:graphServer');
 const jwtClient = security.jwt();
@@ -59,9 +62,58 @@ const createServer = ({ dataSources }, enableMocking = false) => {
       ? { endpoint: '/' }
       : false,
     tracing: false,
-    dataSources: () => ({
-      ...dataSources,
-    }),
+    dataSources: () => {
+      dlog('creating dataSources');
+      const { firestore } = dataSources;
+
+      const eventLoader = new DataLoader(ids =>
+        eventStore(firestore)
+          .getBatch(ids)
+          .then(events => {
+            if (events.includes(null)) {
+              Sentry.withScope(scope => {
+                scope.setLevel('error');
+                scope.setContext(
+                  `Assigned Event's don't exist in events Collection`,
+                  { ids },
+                  { events },
+                );
+                Sentry.captureMessage(
+                  `Assigned Event's don't exist in events Collection`,
+                );
+              });
+            }
+            return ids.map(id => events.find(e => e && e.id === id));
+          }),
+      );
+
+      const communityLoader = new DataLoader(ids =>
+        communityStore(firestore)
+          .getBatch(ids)
+          .then(communities => {
+            if (communities.includes(null)) {
+              Sentry.withScope(scope => {
+                scope.setLevel('error');
+                scope.setContext(
+                  `Assigned Event's don't exist in communities Collection`,
+                  { ids },
+                  { communities },
+                );
+                Sentry.captureMessage(
+                  `Assigned Event's don't exist in communities Collection`,
+                );
+              });
+            }
+            return ids.map(id => communities.find(e => e && e.id === id));
+          }),
+      );
+
+      return {
+        ...dataSources,
+        eventLoader,
+        communityLoader,
+      };
+    },
 
     context: async ({ req, res }) => {
       dlog('building graphql user context');
