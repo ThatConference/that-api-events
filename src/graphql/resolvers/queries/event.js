@@ -38,6 +38,10 @@ export const fieldResolvers = {
     },
   },
   Event: {
+    __resolveReference({ id }, { dataSources: { eventLoader } }) {
+      dlog('resolve reference');
+      return eventLoader.load(id);
+    },
     notifications: notificationResolver.notifications,
     milestones: milestoneResolver.milestones,
     venues: ({ venues }, args, { dataSources: { firestore } }) => {

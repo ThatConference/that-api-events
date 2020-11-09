@@ -113,6 +113,10 @@ export const fieldResolvers = {
   },
 
   Community: {
+    __resolveReference({ id }, { dataSources: { communityLoader } }) {
+      dlog('resolve reference');
+      return communityLoader.load(id);
+    },
     createdBy: ({ createdBy }) => {
       dlog('createdBy');
       return {
