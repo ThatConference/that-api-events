@@ -93,6 +93,23 @@ const event = dbInstance => {
     }));
   };
 
+  function findAllActive({ fields }) {
+    dlog('findAllActive');
+    if (fields && !Array.isArray(fields))
+      throw new Error('fields must be an array of field string values');
+    let query = eventsCol.where('isActive', '==', true);
+    if (fields) {
+      query = query.select(...fields);
+    }
+
+    return query.get().then(data =>
+      data.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      })),
+    );
+  }
+
   const update = async (id, eventInput) => {
     dlog('update id: %s', id);
     const scrubbedEvent = eventInput;
@@ -220,6 +237,7 @@ const event = dbInstance => {
     create,
     getAll,
     getAllByType,
+    findAllActive,
     get,
     getBatch,
     findBySlug,

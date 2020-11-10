@@ -7,4 +7,7 @@ type CommunitiesQuery {
 
   "Community data in scope of logged in member (me)"
   me: MeCommunityQuery @auth(requires: "members")
+
+  "All active community slugs"
+  slugs: [Slug]!
 }

@@ -39,8 +39,15 @@ const community = dbInstance => {
     });
   }
 
-  async function getAllActive() {
-    const { docs } = await communityCol.where('status', '==', 'ACTIVE').get();
+  async function getAllActive({ fields }) {
+    if (fields && !Array.isArray(fields))
+      throw new Error('fields must be an array of field string values');
+
+    let query = communityCol.where('status', '==', 'ACTIVE');
+    if (fields) {
+      query = query.select(...fields);
+    }
+    const { docs } = await query.get();
 
     return docs.map(cm => {
       const result = { id: cm.id, ...cm.data() };
