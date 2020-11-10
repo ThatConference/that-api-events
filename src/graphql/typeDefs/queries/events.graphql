@@ -5,4 +5,6 @@ type EventsQuery {
   event(findBy: EventQueryInput!): EventQuery
   "Event data in scope of logged in memeber (me)"
   me: MeEventQuery @auth(requires: "members")
+  "All active event slugs"
+  slugs: [String]!
 }

@@ -24,5 +24,13 @@ export const fieldResolvers = {
       dlog('me called');
       return {};
     },
+
+    slugs: (_, __, { dataSources: { firestore } }) => {
+      dlog('slugs called');
+      const fields = ['slug'];
+      return communityStore(firestore)
+        .getAllActive({ fields })
+        .then(data => data.map(doc => doc.slug));
+    },
   },
 };
