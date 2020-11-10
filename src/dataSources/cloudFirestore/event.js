@@ -169,6 +169,15 @@ const event = dbInstance => {
     }));
   };
 
+  function getCountByCommunitySlug(communitySlug) {
+    const slimslug = communitySlug.trim().toLowerCase();
+    return eventsCol
+      .where('community', '==', slimslug)
+      .select()
+      .get()
+      .then(docs => docs.size);
+  }
+
   async function findIdFromSlug(slug) {
     dlog('findIdFromSlug %s', slug);
     const slimslug = slug.trim().toLowerCase();
@@ -219,6 +228,7 @@ const event = dbInstance => {
     findFeaturedByCommunitySlug,
     findAllByCommunitySlug,
     findPastByCommunitySlug,
+    getCountByCommunitySlug,
     findIdFromSlug,
     getSlug,
   };
