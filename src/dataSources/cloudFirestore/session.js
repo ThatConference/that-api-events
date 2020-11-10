@@ -8,6 +8,7 @@ const { dateForge } = utility.firestoreDateForge;
 
 const collectionName = 'sessions';
 const approvedSessionStatuses = ['ACCEPTED', 'SCHEDULED', 'CANCELLED'];
+const activeSessionStatuses = ['ACCEPTED', 'SCHEDULED'];
 
 function validateStatuses(statuses) {
   dlog('validateStatuses %o', statuses);
@@ -84,7 +85,7 @@ const session = dbInstance => {
     );
     let query = sessionsCollection
       .where('eventId', '==', eventId)
-      .where('status', 'in', ['ACCEPTED', 'SCHEDULED']);
+      .where('status', 'in', activeSessionStatuses);
 
     if (atDate) {
       const fromdate = new Date(atDate);
@@ -363,6 +364,44 @@ const session = dbInstance => {
     return size;
   }
 
+  async function getSessionStatsByCommunitySlug({ communitySlug, date }) {
+    dlog('getTotalMinutesByCommunitySlug %s', communitySlug);
+    const slimslug = communitySlug.trim().toLowerCase();
+    let targetDate = new Date();
+    if (date instanceof Date) targetDate = date;
+    const query = sessionsCollection
+      .where('communities', 'array-contains', slimslug)
+      .where('status', 'in', activeSessionStatuses)
+      .select('durationInMinutes', 'startTime');
+
+    const { docs } = await query.get();
+    const allSessions = docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    const stats = {
+      totalActivities: 0,
+      pastActivities: 0,
+      upcomingActivities: 0,
+      totalDuration: 0,
+      pastDuration: 0,
+      upcomingDuration: 0,
+    };
+    allSessions.forEach(s => {
+      stats.totalActivities += 1;
+      stats.totalDuration += s.durationInMinutes || 30;
+      if (dateForge(s.startTime) < targetDate) {
+        stats.pastActivities += 1;
+        stats.pastDuration += s.durationInMinutes || 30;
+      } else {
+        stats.upcomingActivities += 1;
+        stats.upcomingDuration += s.durationInMinutes || 30;
+      }
+    });
+
+    return stats;
+  }
+
   async function findByEventIdWithStatuses1(eventId, statuses) {
     dlog('findByEventIdWithStatus %s %o', eventId, statuses);
     const inStatus = validateStatuses(statuses);
@@ -403,6 +442,7 @@ const session = dbInstance => {
     findByCommunityWithStatuses,
     getCountByCommunitySlug,
     getCountByCommunitySlugDate,
+    getSessionStatsByCommunitySlug,
     findByEventIdWithStatuses,
     findByEventIdWithStatuses1Batch,
   };

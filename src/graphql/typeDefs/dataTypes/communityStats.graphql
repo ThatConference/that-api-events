@@ -17,6 +17,9 @@ type CommunityStats {
   "Total minutes of activities for this community. Defaulted to 30 minutes"
   minutesServed: Int
 
+  "Total minutes of activites upcoming for this community. defaulted to 30 minutes per activity"
+  upcomingMinutes: Int
+
   "Total number of events associated with this community"
   totalEvents: Int
 }

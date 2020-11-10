@@ -26,44 +26,27 @@ export const fieldResolvers = {
     stats: async ({ slug }, __, { dataSources: { firestore } }) => {
       dlog('stats called %s', slug);
       if (!slug) return [];
-
-      const allEvents = await eventStore(firestore).findAllByCommunitySlug(
+      const today = new Date();
+      const totalEvents = await eventStore(firestore).getCountByCommunitySlug(
         slug,
       );
-      const sessions = await sessionStore(
-        firestore,
-      ).findAllAcceptedByEventIdBatch(allEvents.map(e => e.id));
-      const allSessions = [];
-      sessions.forEach(s => allSessions.push(...s));
-      const localStats = {
-        totalActivities: 0,
-        pastActivities: 0,
-        futureActivities: 0,
-        totalDuration: 0,
-        pastDuration: 0,
-        futureDuration: 0,
-      };
-      const today = new Date();
-      allSessions.forEach(all => {
-        localStats.totalActivities += 1;
-        localStats.totalDuration += all.durationInMinutes || 30;
-        if (all.startTime < today) {
-          localStats.pastActivities += 1;
-          localStats.pastDuration += all.durationInMinutes || 30;
-        } else {
-          localStats.futureActivities += 1;
-          localStats.futureDuration += all.durationInMinutes || 30;
-        }
-      });
       const totalMembers = await memberStore(firestore).getMemberTotal();
+      const stats = await sessionStore(
+        firestore,
+      ).getSessionStatsByCommunitySlug({
+        communitySlug: slug,
+        date: today,
+      });
+
       return {
+        totalActivities: stats.totalActivities,
+        pastActivities: stats.pastActivities,
+        upcomingActivities: stats.upcomingActivities,
+        hoursServed: Math.floor(stats.pastDuration / 60),
+        minutesServed: stats.pastDuration,
+        upcomingMinutes: stats.upcomingDuration,
         totalMembers,
-        totalActivities: localStats.totalActivities,
-        pastActivities: localStats.pastActivities,
-        upcomingActivities: localStats.futureActivities,
-        hoursServed: Math.floor(localStats.pastDuration / 60),
-        minutesServed: localStats.pastDuration,
-        totalEvents: allEvents.length,
+        totalEvents,
       };
     },
 
