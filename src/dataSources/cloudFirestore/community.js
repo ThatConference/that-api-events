@@ -39,7 +39,8 @@ const community = dbInstance => {
     });
   }
 
-  async function getAllActive({ fields }) {
+  async function getAllActive(fields) {
+    dlog('getAllActive called %o', fields);
     if (fields && !Array.isArray(fields))
       throw new Error('fields must be an array of field string values');
 

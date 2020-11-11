@@ -33,7 +33,7 @@ export const fieldResolvers = {
       dlog('slugs called');
       const fields = ['slug'];
       return eventStore(firestore)
-        .findAllActive({ fields })
+        .findAllActive(fields)
         .then(data => data.map(doc => doc.slug));
     },
   },
