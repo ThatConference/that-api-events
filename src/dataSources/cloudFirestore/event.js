@@ -93,7 +93,7 @@ const event = dbInstance => {
     }));
   };
 
-  function findAllActive({ fields }) {
+  function findAllActive(fields) {
     dlog('findAllActive');
     if (fields && !Array.isArray(fields))
       throw new Error('fields must be an array of field string values');

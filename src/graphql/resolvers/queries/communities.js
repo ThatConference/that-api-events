@@ -29,7 +29,7 @@ export const fieldResolvers = {
       dlog('slugs called');
       const fields = ['slug'];
       return communityStore(firestore)
-        .getAllActive({ fields })
+        .getAllActive(fields)
         .then(data => data.map(doc => doc.slug));
     },
   },
