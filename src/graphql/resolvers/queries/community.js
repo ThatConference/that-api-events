@@ -4,7 +4,6 @@ import { dataSources } from '@thatconference/api';
 import communityStore from '../../../dataSources/cloudFirestore/community';
 import eventStore from '../../../dataSources/cloudFirestore/event';
 import sessionStore from '../../../dataSources/cloudFirestore/session';
-import memberStore from '../../../dataSources/cloudFirestore/members';
 import slackDigest from '../../../lib/slack/slackDigest';
 
 const favoriteStore = dataSources.cloudFirestore.favorites;
@@ -27,10 +26,6 @@ export const fieldResolvers = {
       dlog('stats called %s', slug);
       if (!slug) return [];
       const today = new Date();
-      const totalEvents = await eventStore(firestore).getCountByCommunitySlug(
-        slug,
-      );
-      const totalMembers = await memberStore(firestore).getMemberTotal();
       const stats = await sessionStore(
         firestore,
       ).getSessionStatsByCommunitySlug({
@@ -39,14 +34,13 @@ export const fieldResolvers = {
       });
 
       return {
+        slug,
         totalActivities: stats.totalActivities,
         pastActivities: stats.pastActivities,
         upcomingActivities: stats.upcomingActivities,
         hoursServed: Math.floor(stats.pastDuration / 60),
         minutesServed: stats.pastDuration,
         upcomingMinutes: stats.upcomingDuration,
-        totalMembers,
-        totalEvents,
       };
     },
 
