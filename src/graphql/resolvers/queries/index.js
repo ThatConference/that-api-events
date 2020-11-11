@@ -5,6 +5,7 @@ import { fieldResolvers as venuesFields } from './venues';
 import { fieldResolvers as eventPartnerFields } from './partners';
 import { fieldResolvers as communityFields } from './community';
 import { fieldResolvers as communitiesFields } from './communities';
+import { fieldResolvers as communityStatsFields } from './communityStats';
 import { fieldResolvers as meCommunityFields } from './meCommunity';
 import { fieldResolvers as meCommunityFavFields } from './meCommunityFavorites';
 import { fieldResolvers as meEventFields } from './meEvent';
@@ -21,6 +22,7 @@ export const fieldResolvers = {
   ...eventPartnerFields,
   ...communityFields,
   ...communitiesFields,
+  ...communityStatsFields,
   ...meCommunityFields,
   ...meCommunityFavFields,
   ...meEventFields,
