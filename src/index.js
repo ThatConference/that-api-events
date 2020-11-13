@@ -70,18 +70,34 @@ function createUserContext(req, res, next) {
     return !!mocks.includes('EVENTS');
   };
 
-  const correlationId = req.headers['that-correlation-id']
-    ? req.headers['that-correlation-id']
-    : uuidv4();
+  const correlationId =
+    req.headers['that-correlation-id'] &&
+    req.headers['that-correlation-id'] !== 'undefined'
+      ? req.headers['that-correlation-id']
+      : uuidv4();
 
   Sentry.configureScope(scope => {
     scope.setTag('correlationId', correlationId);
   });
 
+  let site;
+  if (req.headers['that-site']) {
+    site = req.headers['that-site'];
+  } else if (req.headers['x-forwarded-for']) {
+    // eslint-disable-next-line no-useless-escape
+    const rxHost = /^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i;
+    const refererHost = req.headers['x-forwarded-for'];
+    const host = refererHost.match(rxHost);
+    if (host) [, site] = host;
+  } else {
+    site = 'www.thatconference.com';
+  }
+
   req.userContext = {
     authToken: req.headers.authorization,
     correlationId,
     enableMocking: enableMocking(),
+    site,
   };
 
   next();
