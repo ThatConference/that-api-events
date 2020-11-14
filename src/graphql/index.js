@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { isNil } from 'lodash';
 import {
   ApolloServer,
   gql,
@@ -95,12 +95,12 @@ const createServer = ({ dataSources }, enableMocking = false) => {
               Sentry.withScope(scope => {
                 scope.setLevel('error');
                 scope.setContext(
-                  `Assigned Event's don't exist in communities Collection`,
+                  `Assigned Community's don't exist in communities Collection`,
                   { ids },
                   { communities },
                 );
                 Sentry.captureMessage(
-                  `Assigned Event's don't exist in communities Collection`,
+                  `Assigned Community's don't exist in communities Collection`,
                 );
               });
             }
@@ -120,7 +120,7 @@ const createServer = ({ dataSources }, enableMocking = false) => {
       let context = {};
 
       dlog('auth header %o', req.headers);
-      if (!_.isNil(req.headers.authorization)) {
+      if (!isNil(req.headers.authorization)) {
         dlog('validating token for %o:', req.headers.authorization);
 
         Sentry.addBreadcrumb({
@@ -143,7 +143,11 @@ const createServer = ({ dataSources }, enableMocking = false) => {
         dlog('validated token: %o', validatedToken);
         context = {
           ...context,
-          user: validatedToken,
+          user: {
+            ...validatedToken,
+            site: req.userContext.site,
+            correlationId: req.userContext.correlationId,
+          },
         };
       }
 
