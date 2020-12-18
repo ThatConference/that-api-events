@@ -1,0 +1,19 @@
+# Products is a union of the following types.
+# Reference:  https://www.apollographql.com/docs/federation/value-types/#unions
+union Product = Ticket | Membership | Partnership | Food
+
+extend type Ticket @key(fields: "id") {
+  id: ID! @external
+}
+
+extend type Membership @key(fields: "id") {
+  id: ID! @external
+}
+
+extend type Partnership @key(fields: "id") {
+  id: ID! @external
+}
+
+extend type Food @key(fields: "id") {
+  id: ID! @external
+}

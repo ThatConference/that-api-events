@@ -6,6 +6,7 @@ import venueStore from '../../../dataSources/cloudFirestore/venue';
 import eventStore from '../../../dataSources/cloudFirestore/event';
 import partnerStore from '../../../dataSources/cloudFirestore/partner';
 import sessionStore from '../../../dataSources/cloudFirestore/session';
+import productStore from '../../../dataSources/cloudFirestore/product';
 import milestoneResolver from './milestone';
 
 const favoriteStore = dataSources.cloudFirestore.favorites;
@@ -131,6 +132,10 @@ export const fieldResolvers = {
         entityId,
         entityType,
       });
+    },
+    products: ({ id: eventId }, __, { dataSources: { firestore } }) => {
+      dlog('products for event called %s', eventId);
+      return productStore(firestore).findAll({ eventId });
     },
   },
 };

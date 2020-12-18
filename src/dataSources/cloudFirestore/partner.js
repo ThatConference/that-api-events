@@ -1,5 +1,5 @@
 import debug from 'debug';
-import _ from 'lodash';
+import { sortBy } from 'lodash';
 
 import customSort from '../../utilities/sort';
 
@@ -24,7 +24,7 @@ function partnerCollection(dbInstance) {
       ...d.data(),
     }));
 
-    const sortBy = [
+    const sortByA = [
       'PIONEER',
       'EXPLORER',
       'SCOUT',
@@ -39,8 +39,8 @@ function partnerCollection(dbInstance) {
       'MEDIA',
     ];
 
-    const sortedResults = _.sortBy(results, [
-      item => sortBy.indexOf(item.level),
+    const sortedResults = sortBy(results, [
+      item => sortByA.indexOf(item.level),
       'placement',
     ]);
 
@@ -62,7 +62,7 @@ function partnerCollection(dbInstance) {
       ...d.data(),
     }));
 
-    const sortedResult = _.sortBy(results, ['placement']);
+    const sortedResult = sortBy(results, ['placement']);
 
     return sortedResult;
   }

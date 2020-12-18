@@ -20,6 +20,8 @@ import { fieldResolvers as communityFields } from './community';
 import { fieldResolvers as communityFavoriting } from './communityFavoriting';
 import { fieldResolvers as eventFavoriting } from './eventFavoriting';
 
+import { fieldResolvers as eventProductFields } from './eventProduct';
+
 export default {
   ...rootMutations,
 };
@@ -38,4 +40,5 @@ export const fieldResolvers = {
   ...communityFields,
   ...communityFavoriting,
   ...eventFavoriting,
+  ...eventProductFields,
 };

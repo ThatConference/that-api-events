@@ -1,6 +1,12 @@
 type EventMutation {
+  "Update current focused event"
   update(event: EventUpdateInput!): Event! @auth(requires: "events")
+  "manage notifications for focused event"
   notifications: NotificationsMutation @auth(requires: "events")
+  "manage milestones for focused event"
   milestones: MilestonesMutation @auth(requires: "events")
+  "manage partners for focused event"
   partner(id: ID!): EventPartnerMutation @auth(requires: "events")
+  "manage products for focused event"
+  product(productId: ID!): EventProductMutation @auth(requires: "events")
 }
