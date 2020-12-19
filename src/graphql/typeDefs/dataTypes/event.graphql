@@ -87,4 +87,7 @@ type Event @key(fields: "id") {
 
   "assets assigned to this event"
   assets: [Asset]
+
+  "products available from this event"
+  products: [Product]
 }

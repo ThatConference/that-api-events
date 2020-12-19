@@ -1,0 +1,8 @@
+type EventProductMutation {
+  "Add a product to focused event"
+  add: Product! @auth(requires: "events")
+  "update product info for on focused event"
+  update: Product! @auth(requires: "events")
+  "remove product from focused event"
+  remove: Product! @auth(requires: "events")
+}

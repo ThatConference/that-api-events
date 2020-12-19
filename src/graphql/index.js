@@ -1,10 +1,5 @@
 import { isNil } from 'lodash';
-import {
-  ApolloServer,
-  gql,
-  addMockFunctionsToSchema,
-  SchemaDirectiveVisitor,
-} from 'apollo-server-express';
+import { ApolloServer, SchemaDirectiveVisitor } from 'apollo-server-express';
 import { buildFederatedSchema } from '@apollo/federation';
 import debug from 'debug';
 import { security, graph } from '@thatconference/api';
@@ -12,7 +7,7 @@ import DataLoader from 'dataloader';
 import * as Sentry from '@sentry/node';
 
 // Graph Types and Resolvers
-import typeDefsRaw from './typeDefs';
+import typeDefs from './typeDefs';
 import resolvers from './resolvers';
 import directives from './directives';
 import eventStore from '../dataSources/cloudFirestore/event';
@@ -21,11 +16,6 @@ import communityStore from '../dataSources/cloudFirestore/community';
 const dlog = debug('that:api:events:graphServer');
 const jwtClient = security.jwt();
 const { lifecycle } = graph.events;
-
-// convert our raw schema to gql
-const typeDefs = gql`
-  ${typeDefsRaw}
-`;
 
 /**
  * will create you a configured instance of an apollo gateway
@@ -40,18 +30,7 @@ const createServer = ({ dataSources }, enableMocking = false) => {
   dlog('creating apollo server');
   let schema = {};
 
-  if (!enableMocking) {
-    schema = buildFederatedSchema([{ typeDefs, resolvers }]);
-  } else {
-    schema = buildFederatedSchema([{ typeDefs }]);
-
-    addMockFunctionsToSchema({
-      schema,
-      // eslint-disable-next-line global-require
-      mocks: require('./__mocks__').default(),
-      preserveResolvers: true, // so GetServiceDefinition works
-    });
-  }
+  schema = buildFederatedSchema([{ typeDefs, resolvers }]);
 
   SchemaDirectiveVisitor.visitSchemaDirectives(schema, directives);
 
