@@ -61,15 +61,6 @@ function sentryMark(req, res, next) {
 }
 
 function createUserContext(req, res, next) {
-  const enableMocking = () => {
-    if (!req.headers['that-enable-mocks']) return false;
-
-    const headerValues = req.headers['that-enable-mocks'].split(',');
-    const mocks = headerValues.map(i => i.trim().toUpperCase());
-
-    return !!mocks.includes('EVENTS');
-  };
-
   const correlationId =
     req.headers['that-correlation-id'] &&
     req.headers['that-correlation-id'] !== 'undefined'
@@ -96,7 +87,6 @@ function createUserContext(req, res, next) {
   req.userContext = {
     authToken: req.headers.authorization,
     correlationId,
-    enableMocking: enableMocking(),
     site,
   };
 

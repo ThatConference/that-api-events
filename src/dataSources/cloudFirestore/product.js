@@ -71,6 +71,21 @@ function product(dbInstance) {
     });
   }
 
+  async function findAllEnabled({ eventId }) {
+    dlog('findAll enabled products for eventId %s', eventId);
+    const { docs } = await productCollection
+      .where('eventId', '==', eventId)
+      .where('isEnabled', '==', true)
+      .select('type')
+      .get();
+
+    return docs.map(p => {
+      const result = { id: p.id, ...p.data() };
+      result.__typename = resolveProductType(result.type);
+      return result;
+    });
+  }
+
   function update({ productId, upProduct, __typename }) {
     dlog('internal update product on productId %s', productId);
     const docRef = productCollection.doc(productId);
@@ -156,6 +171,7 @@ function product(dbInstance) {
     get,
     find,
     findAll,
+    findAllEnabled,
     addEvent,
     updateEvent,
     removeEvent,

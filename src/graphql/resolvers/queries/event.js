@@ -135,7 +135,7 @@ export const fieldResolvers = {
     },
     products: ({ id: eventId }, __, { dataSources: { firestore } }) => {
       dlog('products for event called %s', eventId);
-      return productStore(firestore).findAll({ eventId });
+      return productStore(firestore).findAllEnabled({ eventId });
     },
   },
 };
