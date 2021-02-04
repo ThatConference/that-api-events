@@ -26,7 +26,7 @@ const { lifecycle } = graph.events;
  *
  *     createGateway(userContext)
  */
-const createServer = ({ dataSources }, enableMocking = false) => {
+const createServer = ({ dataSources }) => {
   dlog('creating apollo server');
   let schema = {};
 
