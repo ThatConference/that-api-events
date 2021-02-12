@@ -1,6 +1,6 @@
 {
   "name": "that-api-events",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "THATConference.com events microservice",
   "main": "index.js",
   "engines": {
@@ -20,12 +20,12 @@
   },
   "dependencies": {
     "@apollo/federation": "^0.21.0",
-    "@google-cloud/firestore": "^4.9.1",
+    "@google-cloud/firestore": "^4.9.3",
     "@google-cloud/functions-framework": "^1.7.1",
     "@graphql-tools/load-files": "^6.2.5",
     "@graphql-tools/merge": "^6.2.7",
-    "@sentry/node": "^6.0.4",
-    "@thatconference/api": "^1.17.0",
+    "@sentry/node": "^6.1.0",
+    "@thatconference/api": "~1.18.1",
     "@thatconference/schema": "^1.0.1",
     "apollo-server": "^2.19.2",
     "apollo-server-express": "^2.19.2",
@@ -43,10 +43,10 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.12.13",
-    "@babel/core": "^7.12.13",
-    "@babel/node": "^7.12.13",
-    "@babel/preset-env": "^7.12.13",
+    "@babel/cli": "^7.12.16",
+    "@babel/core": "^7.12.16",
+    "@babel/node": "^7.12.16",
+    "@babel/preset-env": "^7.12.16",
     "@babel/register": "^7.12.13",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.6.3",
