@@ -45,6 +45,7 @@ export default function checkMemberEventAccess({
     const tickets = allocations.filter(
       a => a.productType === constants.THAT.PRODUCT_TYPE.TICKET,
     );
+    dlog('tickets:: %o', tickets);
 
     const now = new Date();
     let canJoin = false;
