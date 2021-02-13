@@ -12,22 +12,6 @@ const order = dbInstance => {
 
   const allocationCollection = dbInstance.collection(collectionAllocationName);
 
-  function findMeOrderAllocations({ memberId }) {
-    dlog(`findMeOrderAlocations called for member %s`, memberId);
-    return allocationCollection
-      .where('allocatedTo', '==', memberId)
-      .get()
-      .then(querySnapshot =>
-        querySnapshot.docs.map(d => {
-          const r = {
-            id: d.id,
-            ...d.data(),
-          };
-          return allocationDateForge(r);
-        }),
-      );
-  }
-
   function findMeOrderAllocationsForEvent({ memberId, eventId }) {
     dlog(
       `findMeOrderAlocationsForEvent called for member %s on Event %s`,
@@ -50,7 +34,6 @@ const order = dbInstance => {
   }
 
   return {
-    findMeOrderAllocations,
     findMeOrderAllocationsForEvent,
   };
 };

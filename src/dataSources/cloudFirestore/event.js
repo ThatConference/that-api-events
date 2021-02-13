@@ -33,11 +33,12 @@ const event = dbInstance => {
         id: d.id,
         ...d.data(),
       };
+      result = eventDateForge(result);
     } else if (size > 1) {
       throw new Error(`Multiple Event slugs found for ${slimSlug}`);
     }
 
-    return eventDateForge(result);
+    return result;
   };
 
   const create = async newEvent => {
@@ -69,9 +70,10 @@ const event = dbInstance => {
         id: doc.id,
         ...doc.data(),
       };
+      result = eventDateForge(result);
     }
 
-    return eventDateForge(result);
+    return result;
   }
 
   async function getBatch(ids) {

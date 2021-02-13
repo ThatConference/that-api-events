@@ -26,7 +26,7 @@ function product(dbInstance) {
           };
           result.__typename = resolveProductType(result.type);
         }
-        dlog('get product result %O', result);
+        dlog('get product result %o', result);
         return result;
       });
   }

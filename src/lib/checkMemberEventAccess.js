@@ -7,13 +7,10 @@ import constants from '../constants';
 const dlog = debug('that:api:events:checkMemberEventAccess');
 const memberLib = dataSources.cloudFirestore.member;
 
-export default function checkMemberEventAccess({
-  memberId,
-  eventId,
-  firestore,
-}) {
+export default function checkMemberEventAccess({ user, eventId, firestore }) {
   dlog('checkMemberEventAccess called');
 
+  const memberId = user.sub;
   let orderStore;
   let eventStore;
   let memberStore;
@@ -50,7 +47,8 @@ export default function checkMemberEventAccess({
     const now = new Date();
     let canJoin = false;
 
-    if (now < startDate || now > endDate) canJoin = false;
+    if (user.permissions.includes('admin')) canJoin = true;
+    else if (now < startDate || now > endDate) canJoin = false;
     else if (!isTicketRequiredToJoin) canJoin = true;
     else if (isTicketRequiredToJoin && canMembershipJoin)
       canJoin = tickets.length > 0 || isMember;

@@ -11,7 +11,7 @@ export const fieldResolvers = {
     },
     hasAccess: (_, { eventId }, { dataSources: { firestore }, user }) => {
       dlog('user %s have access to Event %s?', user.sub, eventId);
-      return checkMemberEventAccess({ memberId: user.sub, eventId, firestore });
+      return checkMemberEventAccess({ user, eventId, firestore });
     },
   },
 };
