@@ -1,8 +1,6 @@
 import debug from 'debug';
 import { sortBy } from 'lodash';
 
-import customSort from '../../utilities/sort';
-
 const dlog = debug('that:api:events:datasources:firebase:events:partner');
 
 function partnerCollection(dbInstance) {

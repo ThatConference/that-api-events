@@ -1,6 +1,17 @@
 import debug from 'debug';
+import { utility } from '@thatconference/api';
 
 const dlog = debug('that:api:events:datasources:firebase:event');
+const { entityDateForge } = utility.firestoreDateForge;
+const forgeFields = [
+  'startDate',
+  'endDate',
+  'voteOpenDate',
+  'voteCloseDate',
+  'callForSpeakersOpenDate',
+  'callForSpeakersCloseDate',
+];
+const eventDateForge = entityDateForge({ fields: forgeFields });
 
 const event = dbInstance => {
   dlog('instance created');
@@ -22,6 +33,7 @@ const event = dbInstance => {
         id: d.id,
         ...d.data(),
       };
+      result = eventDateForge(result);
     } else if (size > 1) {
       throw new Error(`Multiple Event slugs found for ${slimSlug}`);
     }
@@ -58,6 +70,7 @@ const event = dbInstance => {
         id: doc.id,
         ...doc.data(),
       };
+      result = eventDateForge(result);
     }
 
     return result;
@@ -75,10 +88,13 @@ const event = dbInstance => {
     dlog('get all');
     const { docs } = await eventsCol.get();
 
-    const results = docs.map(d => ({
-      id: d.id,
-      ...d.data(),
-    }));
+    const results = docs.map(d => {
+      const r = {
+        id: d.id,
+        ...d.data(),
+      };
+      return eventDateForge(r);
+    });
 
     return results;
   };
@@ -87,10 +103,13 @@ const event = dbInstance => {
     dlog('getAllByType', type);
     const { docs } = await eventsCol.where('type', '==', type).get();
 
-    return docs.map(ev => ({
-      id: ev.id,
-      ...ev.data(),
-    }));
+    return docs.map(ev => {
+      const result = {
+        id: ev.id,
+        ...ev.data(),
+      };
+      return eventDateForge(result);
+    });
   };
 
   function findAllActive(fields) {
@@ -103,10 +122,13 @@ const event = dbInstance => {
     }
 
     return query.get().then(data =>
-      data.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      })),
+      data.docs.map(doc => {
+        const r = {
+          id: doc.id,
+          ...doc.data(),
+        };
+        return eventDateForge(r);
+      }),
     );
   }
 
@@ -139,10 +161,13 @@ const event = dbInstance => {
       .where('endDate', '>=', new Date())
       .get();
 
-    return docs.map(e => ({
-      id: e.id,
-      ...e.data(),
-    }));
+    return docs.map(e => {
+      const r = {
+        id: e.id,
+        ...e.data(),
+      };
+      return eventDateForge(r);
+    });
   };
 
   const findFeaturedByCommunitySlug = async slug => {
@@ -155,10 +180,13 @@ const event = dbInstance => {
       .where('endDate', '>=', new Date())
       .get();
 
-    return docs.map(e => ({
-      id: e.id,
-      ...e.data(),
-    }));
+    return docs.map(e => {
+      const r = {
+        id: e.id,
+        ...e.data(),
+      };
+      return eventDateForge(r);
+    });
   };
 
   const findAllByCommunitySlug = async slug => {
@@ -166,10 +194,13 @@ const event = dbInstance => {
     dlog('findAllByCommunitySlug %s', slimslug);
     const { docs } = await eventsCol.where('community', '==', slimslug).get();
 
-    return docs.map(e => ({
-      id: e.id,
-      ...e.data(),
-    }));
+    return docs.map(e => {
+      const r = {
+        id: e.id,
+        ...e.data(),
+      };
+      return eventDateForge(r);
+    });
   };
 
   const findPastByCommunitySlug = async slug => {
@@ -180,10 +211,13 @@ const event = dbInstance => {
       .where('endDate', '<', new Date())
       .get();
 
-    return docs.map(e => ({
-      id: e.id,
-      ...e.data(),
-    }));
+    return docs.map(e => {
+      const r = {
+        id: e.id,
+        ...e.data(),
+      };
+      return eventDateForge(r);
+    });
   };
 
   function getCountByCommunitySlug(communitySlug) {

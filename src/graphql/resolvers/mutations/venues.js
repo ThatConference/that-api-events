@@ -5,7 +5,7 @@ export const fieldResolvers = {
     create: async (parent, { venue }, { dataSources: { firestore } }) =>
       venueStore(firestore).create(venue),
 
-    delete: (parent, { id }, { dataSources: { firestore } }) => {
+    delete: () => {
       throw new Error('Not implemented yet.');
     },
 

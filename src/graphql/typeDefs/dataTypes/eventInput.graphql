@@ -38,12 +38,36 @@ input EventCreateInput {
   website: URL!
 
   "is voting for this event open or not"
-  isVotingOpen: Boolean
+  isVotingOpen: Boolean @deprecated
+
+  "date/time when session voting opens for event"
+  voteOpenDate: Date
+
+  "date/time when session voting closes for event"
+  voteCloseDate: Date
 
   "is call for speakers open or not"
-  isCallForSpeakersOpen: Boolean
+  isCallForSpeakersOpen: Boolean @deprecated
 
-  "Will this event show in the list of events for a comunity. Active or not active"
+  "date/time when call for speakers opens for event"
+  callForSpeakersOpenDate: Date
+
+  "date/time when call for speakers closes for event"
+  callForSpeakersCloseDate: Date
+
+  "When true a ticket is required to mutate session in this event"
+  isTicketRequiredToMutate: Boolean
+
+  "When true a ticket is required to join a session in this event"
+  isTicketRequiredToJoin: Boolean
+
+  "When true membership holders can mutate a session in this event"
+  canMembershipMutate: Boolean
+
+  "When true membership holders can join a session in this event"
+  canMembershipJoin: Boolean
+
+  "Will this event show in the list of events for a community. Active or not active"
   isFeatured: Boolean
 
   "This event is Active. It has current activities happening"
@@ -93,11 +117,35 @@ input EventUpdateInput {
   "Website"
   website: URL
 
-  "is voting for this event open or not"
-  isVotingOpen: Boolean
+  "DEPRECATED: is voting for this event open or not"
+  isVotingOpen: Boolean @deprecated
 
-  "is call for speakers open or not"
-  isCallForSpeakersOpen: Boolean
+  "date/time when session voting opens for event"
+  voteOpenDate: Date
+
+  "date/time when session voting closes for event"
+  voteCloseDate: Date
+
+  "DEPRECATED: is call for speakers open or not"
+  isCallForSpeakersOpen: Boolean @deprecated
+
+  "date/time when call for speakers opens for event"
+  callForSpeakersOpenDate: Date
+
+  "date/time when call for speakers closes for event"
+  callForSpeakersCloseDate: Date
+
+  "When true a ticket is required to mutate session in this event"
+  isTicketRequiredToMutate: Boolean
+
+  "When true a ticket is required to join a session in this event"
+  isTicketRequiredToJoin: Boolean
+
+  "When true membership holders can mutate a session in this event"
+  canMembershipMutate: Boolean
+
+  "When true membership holders can join a session in this event"
+  canMembershipJoin: Boolean
 
   "Will this event show in the list of events for a comunity. Active or not active"
   isFeatured: Boolean

@@ -1,4 +1,6 @@
 type MeEventQuery {
   "Event favorite queries of logged in user"
   favorites: MeEventFavoritesQuery @auth(requires: "members")
+  "Does this member have access to this event?"
+  hasAccess(eventId: ID!): Boolean!
 }

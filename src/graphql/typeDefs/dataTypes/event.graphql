@@ -36,7 +36,7 @@ type Event @key(fields: "id") {
   "Website"
   website: URL
 
-  "List of this event's milestones in ascending chronilogical order"
+  "List of this event's milestones in ascending chronological order"
   milestones: [Milestone]
 
   "List of this event's notifications"
@@ -58,11 +58,35 @@ type Event @key(fields: "id") {
     cursor: String
   ): PagedAcceptedSession
 
-  "is voting for this event open or not"
-  isVotingOpen: Boolean
+  "DEPRECATED: is voting for this event open or not"
+  isVotingOpen: Boolean @deprecated
 
-  "is call for speakers open or not"
-  isCallForSpeakersOpen: Boolean
+  "date/time when session voting opens for event"
+  voteOpenDate: Date
+
+  "date/time when session voting closes for event"
+  voteCloseDate: Date
+
+  "DEPRECATED: is call for speakers open or not"
+  isCallForSpeakersOpen: Boolean @deprecated
+
+  "date/time when call for speakers opens for event"
+  callForSpeakersOpenDate: Date
+
+  "date/time when call for speakers closes for event"
+  callForSpeakersCloseDate: Date
+
+  "When true a ticket is required to mutate session in this event"
+  isTicketRequiredToMutate: Boolean
+
+  "When true a ticket is required to join a session in this event"
+  isTicketRequiredToJoin: Boolean
+
+  "When true membership holders can mutate a session in this event"
+  canMembershipMutate: Boolean
+
+  "When true membership holders can join a session in this event"
+  canMembershipJoin: Boolean
 
   "Will this event show in the list of events for a community. Must also be Active to show as a 'FEATURED' event"
   isFeatured: Boolean

@@ -135,7 +135,7 @@ const createServer = ({ dataSources }) => {
 
     plugins: [
       {
-        requestDidStart(req) {
+        requestDidStart() {
           return {
             executionDidStart(requestContext) {
               lifecycle.emit('executionDidStart', {

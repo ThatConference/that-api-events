@@ -24,8 +24,9 @@ function product(dbInstance) {
             type: doc.get('type'),
             eventId: doc.get('eventId'),
           };
+          result.__typename = resolveProductType(result.type);
         }
-        dlog('get product result %O', result);
+        dlog('get product result %o', result);
         return result;
       });
   }

@@ -199,25 +199,6 @@ const community = dbInstance => {
     return communityDateForge(out);
   }
 
-  async function createLocal({ newCommunity, user }) {
-    dlog('create new community with slug %s', newCommunity.slug);
-    const slugCheck = await isSlugTaken(newCommunity.slug);
-    if (slugCheck)
-      throw new Error('Slug is already in use. %s', newCommunity.slug);
-    const cleanCommunity = scrubCommunity({
-      community: newCommunity,
-      user,
-      isNew: true,
-    });
-    const newDocRef = await communityCol.add(cleanCommunity);
-    const newDocument = await newDocRef.get();
-
-    return {
-      id: newDocument.id,
-      ...newDocument.data(),
-    };
-  }
-
   async function update({ communityId, modifiedCommunity, user }) {
     dlog('update community. %s', communityId);
     const communityDocRef = dbInstance.doc(
