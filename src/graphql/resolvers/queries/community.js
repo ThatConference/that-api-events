@@ -81,7 +81,7 @@ export const fieldResolvers = {
       sessionRefs.forEach(s => sessions.push(...s));
       let result = [];
       if (sessions.length > 0) {
-        slackDigest({ sessions, hours: hoursAfter });
+        slackDigest({ sessions, hours: hoursAfter, events: activeEvents });
 
         result = sessions.map(s => ({ id: s.id }));
       }

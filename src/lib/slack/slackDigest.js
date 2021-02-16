@@ -4,7 +4,7 @@ import envConfig from '../../envConfig';
 
 const dlog = debug('that:api:sessions:slack-activitydigest');
 
-function createActivityCard(session) {
+function createActivityCard({ session, eventName }) {
   return {
     type: 'section',
     text: {
@@ -22,6 +22,12 @@ function createActivityCard(session) {
       },
       url: `https://that.us/activities/${session.id}`,
     },
+    fields: [
+      {
+        type: 'mrkdwn',
+        text: `${eventName}`,
+      },
+    ],
   };
 }
 
@@ -29,7 +35,7 @@ const divider = {
   type: 'divider',
 };
 
-export default function digestNextHours({ sessions, hours }) {
+export default function digestNextHours({ sessions, hours, events }) {
   dlog('call digest for next hours, %d', hours);
 
   const hourText =
@@ -54,11 +60,12 @@ export default function digestNextHours({ sessions, hours }) {
   };
 
   sessions.forEach(session => {
-    const card = createActivityCard(session);
+    const [thisEvent] = events.filter(e => e.id === session.eventId);
+    const eventName = thisEvent ? thisEvent.name : 'THAT';
+    const card = createActivityCard({ session, eventName });
     basePost.blocks.push(card);
+    basePost.blocks.push(divider);
   });
-
-  basePost.blocks.push(divider);
 
   return callSlackHook(basePost);
 }

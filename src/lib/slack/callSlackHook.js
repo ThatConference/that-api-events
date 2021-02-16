@@ -9,7 +9,7 @@ export default function callSlackHook(hookBody) {
   dlog('calling Slack hook');
   if (
     process.env.NODE_ENV === 'production' ||
-    process.env.TEST_SLACK_NOTIFICATIONS
+    process.env.TEST_SLACK_NOTIFICATIONS === 'true'
   ) {
     const slackUrl = envConfig.slackWebhookUrl;
     fetch(slackUrl, {
