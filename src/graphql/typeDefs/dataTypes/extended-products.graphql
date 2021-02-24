@@ -1,6 +1,6 @@
 # Products is a union of the following types.
 # Reference:  https://www.apollographql.com/docs/federation/value-types/#unions
-union Product = Ticket | Membership | Partnership | Food
+union Product = Ticket | Membership | Partnership | Food | Coupon
 
 extend type Ticket @key(fields: "id") {
   id: ID! @external
@@ -15,5 +15,9 @@ extend type Partnership @key(fields: "id") {
 }
 
 extend type Food @key(fields: "id") {
+  id: ID! @external
+}
+
+extend type Coupon @key(fields: "id") {
   id: ID! @external
 }
