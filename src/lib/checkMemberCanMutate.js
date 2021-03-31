@@ -1,15 +1,14 @@
 import debug from 'debug';
 import { dataSources } from '@thatconference/api';
-import orderLib from '../dataSources/cloudFirestore/order';
 import eventLib from '../dataSources/cloudFirestore/event';
+import orderLib from '../dataSources/cloudFirestore/order';
 import constants from '../constants';
 
-const dlog = debug('that:api:events:checkMemberEventAccess');
+const dlog = debug('that:api:sessions:checkMemberCanMutate');
 const memberLib = dataSources.cloudFirestore.member;
 
-export default function checkMemberEventAccess({ user, eventId, firestore }) {
-  dlog('checkMemberEventAccess called');
-
+export default function checkMemberCanMutate({ user, eventId, firestore }) {
+  dlog('checkMemberCanMutate called for event %s', eventId);
   const memberId = user.sub;
   let orderStore;
   let eventStore;
@@ -33,10 +32,10 @@ export default function checkMemberEventAccess({ user, eventId, firestore }) {
     const [member, event, allocations] = data;
     if (!event) throw new Error('Event record could not be found');
     const {
-      isTicketRequiredToJoin = false,
-      canMembershipJoin = false,
-      startDate,
-      endDate,
+      isTicketRequiredToMutate = false,
+      canMembershipMutate = false,
+      callForSpeakersOpenDate,
+      callForSpeakersCloseDate,
     } = event;
     const { isMember = false } = member;
     const tickets = allocations.filter(
@@ -46,17 +45,18 @@ export default function checkMemberEventAccess({ user, eventId, firestore }) {
     dlog('isMember', isMember);
 
     const now = new Date();
-    let canJoin = false;
+    let canMutate = false;
 
-    if (user.permissions.includes('admin')) canJoin = true;
-    else if (startDate < now && endDate > now) canJoin = true;
-    else if (!isTicketRequiredToJoin) canJoin = true;
-    else if (isTicketRequiredToJoin && canMembershipJoin)
-      canJoin = tickets.length > 0 || isMember;
-    else if (isTicketRequiredToJoin && !canMembershipJoin)
-      canJoin = tickets.length > 0;
+    if (user.permissions.includes('admin')) canMutate = true;
+    else if (callForSpeakersOpenDate < now && callForSpeakersCloseDate > now)
+      canMutate = true;
+    else if (!isTicketRequiredToMutate) canMutate = true;
+    else if (isTicketRequiredToMutate && canMembershipMutate)
+      canMutate = tickets.length > 0 || isMember;
+    else if (isTicketRequiredToMutate && !canMembershipMutate)
+      canMutate = tickets.length > 0;
 
-    dlog('can join::', canJoin);
-    return canJoin;
+    dlog('canMutate::', canMutate);
+    return canMutate;
   });
 }

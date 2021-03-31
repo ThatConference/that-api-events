@@ -1,0 +1,6 @@
+type MeEventAccessQuery {
+  "Current member has access to event"
+  hasAccess: Boolean!
+  "Current member may add sessions to event"
+  addSession: Boolean!
+}
