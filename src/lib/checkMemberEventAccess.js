@@ -32,12 +32,7 @@ export default function checkMemberEventAccess({ user, eventId, firestore }) {
   return Promise.all([memberFunc, eventFunc, allocationFunc]).then(data => {
     const [member, event, allocations] = data;
     if (!event) throw new Error('Event record could not be found');
-    const {
-      isTicketRequiredToJoin = false,
-      canMembershipJoin = false,
-      startDate,
-      endDate,
-    } = event;
+    const { isTicketRequiredToJoin = false, canMembershipJoin = false } = event;
     const { isMember = false } = member;
     const tickets = allocations.filter(
       a => a.productType === constants.THAT.PRODUCT_TYPE.TICKET,
@@ -45,11 +40,9 @@ export default function checkMemberEventAccess({ user, eventId, firestore }) {
     dlog('tickets:: %o', tickets);
     dlog('isMember', isMember);
 
-    const now = new Date();
     let canJoin = false;
 
     if (user.permissions.includes('admin')) canJoin = true;
-    else if (startDate < now && endDate > now) canJoin = true;
     else if (!isTicketRequiredToJoin) canJoin = true;
     else if (isTicketRequiredToJoin && canMembershipJoin)
       canJoin = tickets.length > 0 || isMember;
@@ -60,3 +53,4 @@ export default function checkMemberEventAccess({ user, eventId, firestore }) {
     return canJoin;
   });
 }
+export const tests = { memberLib };
