@@ -1,6 +1,9 @@
 type MeEventQuery {
   "Event favorite queries of logged in user"
   favorites: MeEventFavoritesQuery @auth(requires: "members")
-  "Does this member have access to this event?"
+  "DEPRECATED: Does this member have access to this event?"
   hasAccess(eventId: ID!): Boolean!
+    @deprecated(reason: "Use access path off of me instead")
+  "Event Access information for the logged in user"
+  access(eventId: ID!): MeEventAccessQuery @auth(requires: "members")
 }

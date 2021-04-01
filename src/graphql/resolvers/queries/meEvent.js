@@ -9,6 +9,7 @@ export const fieldResolvers = {
       dlog('meEventQuery called');
       return {};
     },
+    access: (_, { eventId }) => ({ eventId }),
     hasAccess: (_, { eventId }, { dataSources: { firestore }, user }) => {
       dlog('user %s have access to Event %s?', user.sub, eventId);
       return checkMemberEventAccess({ user, eventId, firestore });

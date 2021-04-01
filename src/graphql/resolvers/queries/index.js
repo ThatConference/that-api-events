@@ -10,6 +10,7 @@ import { fieldResolvers as meCommunityFields } from './meCommunity';
 import { fieldResolvers as meCommunityFavFields } from './meCommunityFavorites';
 import { fieldResolvers as meEventFields } from './meEvent';
 import { fieldResolvers as meEventFavFields } from './meEventFavorites';
+import { fieldResolvers as meEventAccessFields } from './meEventAccess';
 
 export default {
   ...root,
@@ -27,4 +28,5 @@ export const fieldResolvers = {
   ...meCommunityFavFields,
   ...meEventFields,
   ...meEventFavFields,
+  ...meEventAccessFields,
 };
