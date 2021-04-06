@@ -33,6 +33,7 @@ export default function checkMemberEventAccess({ user, eventId, firestore }) {
     const [member, event, allocations] = data;
     if (!event) throw new Error('Event record could not be found');
     const { isTicketRequiredToJoin = false, canMembershipJoin = false } = event;
+    if (!member) return false;
     const { isMember = false } = member;
     const tickets = allocations.filter(
       a => a.productType === constants.THAT.PRODUCT_TYPE.TICKET,
