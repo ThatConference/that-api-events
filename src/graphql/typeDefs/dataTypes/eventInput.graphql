@@ -37,6 +37,9 @@ input EventCreateInput {
   "Website"
   website: URL!
 
+  "Logo for event. SVG Preferred format"
+  logo: URL
+
   "is voting for this event open or not"
   isVotingOpen: Boolean @deprecated
 
@@ -116,6 +119,9 @@ input EventUpdateInput {
 
   "Website"
   website: URL
+
+  "Logo for event. SVG Preferred format"
+  logo: URL
 
   "DEPRECATED: is voting for this event open or not"
   isVotingOpen: Boolean @deprecated
