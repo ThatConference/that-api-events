@@ -36,6 +36,9 @@ type Event @key(fields: "id") {
   "Website"
   website: URL
 
+  "Logo for event. SVG Preferred format"
+  logo: URL
+
   "List of this event's milestones in ascending chronological order"
   milestones: [Milestone]
 
