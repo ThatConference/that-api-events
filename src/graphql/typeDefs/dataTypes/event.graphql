@@ -39,6 +39,12 @@ type Event @key(fields: "id") {
   "Logo for event. SVG Preferred format"
   logo: URL
 
+  "Stripe checkout success URL for this event"
+  checkoutSuccess: URL
+
+  "Stripe checkout cancelled URL for this event"
+  checkoutCancel: URL
+
   "List of this event's milestones in ascending chronological order"
   milestones: [Milestone]
 
