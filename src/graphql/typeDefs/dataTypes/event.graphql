@@ -45,6 +45,9 @@ type Event @key(fields: "id") {
   "Stripe checkout cancelled URL for this event"
   checkoutCancel: URL
 
+  "Email providers reference to template used for transactional email of purchased ticket for event"
+  emailTemplateTicketPurchased: String
+
   "List of this event's milestones in ascending chronological order"
   milestones: [Milestone]
 
