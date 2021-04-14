@@ -1,12 +1,7 @@
+import { constants as apiConstants } from '@thatconference/api';
+
 const constants = {
-  THAT: {
-    PRODUCT_TYPE: {
-      TICKET: 'TICKET',
-      MEMBERSHIP: 'MEMBERSHIP',
-      PARTNERSHIP: 'PARTNERSHIP',
-      FOOD: 'FOOD',
-    },
-  },
+  ...apiConstants,
 };
 
 export default constants;
