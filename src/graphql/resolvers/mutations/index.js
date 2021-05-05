@@ -11,6 +11,8 @@ import { fieldResolvers as notificationFields } from './notification';
 
 import { fieldResolvers as venuesFields } from './venues';
 import { fieldResolvers as venueFields } from './venue';
+import { fieldResolvers as venueRoomsFields } from './venueRooms';
+import { fieldResolvers as venueRoomFields } from './venueRoom';
 
 import { fieldResolvers as eventPartner } from './eventPartner';
 
@@ -35,6 +37,8 @@ export const fieldResolvers = {
   ...notificationFields,
   ...venuesFields,
   ...venueFields,
+  ...venueRoomsFields,
+  ...venueRoomFields,
   ...eventPartner,
   ...communitiesFields,
   ...communityFields,

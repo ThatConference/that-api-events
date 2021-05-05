@@ -1,3 +1,6 @@
 type VenueMutation {
-  update(venue: VenueUpdateInput!): Venue! @auth(requires: "venues")
+  "update a specific venue"
+  update(venue: VenueUpdateInput!): Venue! @auth(requires: "admin")
+  "Venue's rooms mutations"
+  rooms: VenueRoomsMutation
 }

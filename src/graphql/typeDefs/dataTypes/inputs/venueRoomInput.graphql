@@ -1,0 +1,27 @@
+"Create a new VenueRoom type"
+input VenueRoomCreateInput {
+  "Proper name for the room. Usually same as used at Venue"
+  name: String!
+  "The area of the room in square feet (sqft)"
+  sqft: Int
+  "The location of the room"
+  location: String
+  "Address used for Room's electronic signboard"
+  signAddress: URL
+  "Notes about this room"
+  notes: String
+}
+
+"Update an existing VenueRoom type"
+input VenueRoomUpdateInput {
+  "Proper name for the room. Usually same as used at Venue"
+  name: String
+  "The area of the room in square feet (sqft)"
+  sqft: Int
+  "The location of the room"
+  location: String
+  "Address used for Room's electronic signboard"
+  signAddress: URL
+  "Notes about this room"
+  notes: String
+}

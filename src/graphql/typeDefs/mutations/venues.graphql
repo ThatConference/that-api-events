@@ -1,5 +1,5 @@
 type VenuesMutation {
-  create(venue: VenueCreateInput!): Venue! @auth(requires: "venues")
-  delete(id: ID!): ID @auth(requires: "venues")
-  venue(id: ID!): VenueMutation @auth(requires: "venues")
+  create(venue: VenueCreateInput!): Venue! @auth(requires: "admin")
+  delete(id: ID!): ID @auth(requires: "admin")
+  venue(id: ID!): VenueMutation @auth(requires: "admin")
 }
