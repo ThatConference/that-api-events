@@ -1,0 +1,8 @@
+type VenueRoomsMutation {
+  "Create a new Venue Room"
+  create(venueRoom: VenueRoomCreateInput!): VenueRoom! @auth(requires: "venues")
+  "Delete an existing Venue Room"
+  delete(roomId: ID!): ID @auth(requires: "venues")
+  "Room-specific mutations"
+  room(roomId: ID!): VenueRoomMutation @auth(requires: "venues")
+}

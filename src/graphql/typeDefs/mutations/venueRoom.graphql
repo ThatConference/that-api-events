@@ -1,0 +1,4 @@
+type VenueRoomMutation {
+  "update a venue's room information"
+  update(venueRoom: VenueRoomUpdateInput!): VenueRoom! @auth(requires: "venues")
+}
