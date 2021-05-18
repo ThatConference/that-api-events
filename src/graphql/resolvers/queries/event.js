@@ -94,18 +94,6 @@ export const fieldResolvers = {
         cursor,
       });
     },
-
-    sessions1: (
-      { id },
-      { onOrAfter, daysAfter },
-      { dataSources: { firestore } },
-    ) => {
-      dlog('sessions');
-
-      return sessionStore(firestore)
-        .findAllApprovedActiveByEventIdAtDate(id, onOrAfter, daysAfter)
-        .then(s => s.map(d => ({ id: d.id })));
-    },
     followCount: ({ id }, __, { dataSources: { firestore } }) => {
       dlog('followCount called');
       return favoriteStore(firestore).getFavoriteCount({
@@ -136,6 +124,27 @@ export const fieldResolvers = {
     products: ({ id: eventId }, __, { dataSources: { firestore } }) => {
       dlog('products for event called %s', eventId);
       return productStore(firestore).findAllEnabled({ eventId });
+    },
+    isCallForSpeakersOpen: ({
+      callForSpeakersOpenDate,
+      callForSpeakersCloseDate,
+    }) => {
+      const now = new Date();
+      if (
+        !(callForSpeakersOpenDate instanceof Date) ||
+        !(callForSpeakersCloseDate instanceof Date)
+      )
+        return false;
+
+      let result = false;
+      if (
+        callForSpeakersOpenDate < callForSpeakersCloseDate &&
+        now > callForSpeakersOpenDate &&
+        now < callForSpeakersCloseDate
+      )
+        result = true;
+
+      return result;
     },
   },
 };

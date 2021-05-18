@@ -79,8 +79,8 @@ type Event @key(fields: "id") {
   "date/time when session voting closes for event"
   voteCloseDate: Date
 
-  "DEPRECATED: is call for speakers open or not"
-  isCallForSpeakersOpen: Boolean @deprecated
+  "is call for speakers open or not, calculated based on date fields"
+  isCallForSpeakersOpen: Boolean!
 
   "date/time when call for speakers opens for event"
   callForSpeakersOpenDate: Date
