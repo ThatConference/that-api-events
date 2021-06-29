@@ -1,8 +1,11 @@
 type RegistrationMutation {
   "Check-in an orderAllocation"
   checkin(orderAllocationId: ID!, partnerPin: String): CheckInResult!
+    @auth(requires: "volunteer")
   "Revert the check-in of an orderAllocation"
   revertCheckin(orderAllocationId: ID!): CheckInResult!
+    @auth(requires: "volunteer")
   "Set a pin on a checked-in orderAllocation"
   setPartnerPin(orderAllocationId: ID!, partnerPin: String!): CheckInResult!
+    @auth(requires: "volunteer")
 }
