@@ -9,4 +9,6 @@ type EventMutation {
   partner(id: ID!): EventPartnerMutation @auth(requires: "events")
   "manage products for focused event"
   product(productId: ID!): EventProductMutation @auth(requires: "events")
+  "Registration actions for focused event"
+  registration: RegistrationMutation @auth(requires: "volunteer")
 }

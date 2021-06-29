@@ -1,6 +1,12 @@
 type EventQuery {
+  "return the specific event"
   get: Event
+  "partner information for specific event"
   partners: EventPartnersQuery!
+  "list session using id for specific event"
   sessionById(sessionId: ID!): AcceptedSession
+  "list session using slug for specific event"
   sessionBySlug(slug: String!): AcceptedSession
+  "Registration query"
+  registration: RegistrationQuery @auth(requires: "volunteer")
 }
