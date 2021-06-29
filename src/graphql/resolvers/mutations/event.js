@@ -8,5 +8,6 @@ export const fieldResolvers = {
     milestones: ({ eventId }) => ({ eventId }),
     partner: ({ eventId }, { id }) => ({ eventId, partnerId: id }),
     product: ({ eventId }, { productId }) => ({ eventId, productId }),
+    registration: ({ eventId }) => ({ eventId }),
   },
 };

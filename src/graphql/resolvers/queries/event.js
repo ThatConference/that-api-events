@@ -37,6 +37,7 @@ export const fieldResolvers = {
       dlog('EventQuery sessionBySlug called');
       return sessionStore(firestore).findApprovedBySlug(eventId, slug);
     },
+    registration: ({ eventId }) => ({ eventId }),
   },
   Event: {
     __resolveReference({ id }, { dataSources: { eventLoader } }) {

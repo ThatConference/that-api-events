@@ -1,0 +1,8 @@
+type CheckInResult {
+  "Check-in result"
+  result: Boolean!
+  "check-in result message"
+  message: String!
+  "Pin set during operation"
+  pinSet: String
+}
