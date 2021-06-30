@@ -76,6 +76,7 @@ export const fieldResolvers = {
       const updateAllocation = {
         partnerPin,
         checkedInAt: new Date(),
+        checkedInBy: user.sub,
         hasCheckedIn: true,
       };
 
