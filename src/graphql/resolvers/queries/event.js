@@ -147,5 +147,6 @@ export const fieldResolvers = {
 
       return result;
     },
+    scheduleDownload: ({ id: eventId }) => ({ eventId }),
   },
 };
