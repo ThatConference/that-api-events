@@ -402,8 +402,8 @@ const session = dbInstance => {
     return stats;
   }
 
-  async function findByEventIdWithStatuses1(eventId, statuses) {
-    dlog('findByEventIdWithStatus %s %o', eventId, statuses);
+  async function findAllByEventIdWithStatuses(eventId, statuses) {
+    dlog('findAllByEventIdWithStatus %s %o', eventId, statuses);
     const inStatus = validateStatuses(statuses);
     const { docs } = await sessionsCollection
       .where('eventId', '==', eventId)
@@ -418,15 +418,15 @@ const session = dbInstance => {
     return results;
   }
 
-  function findByEventIdWithStatuses1Batch(eventIds, statuses) {
-    dlog('findByEventIdWithStatusBatch %o %o', eventIds, statuses);
+  function findAllByEventIdWithStatusesBatch(eventIds, statuses) {
+    dlog('findAllByEventIdWithStatusBatch %o %o', eventIds, statuses);
     if (!Array.isArray(eventIds) || eventIds.length === 0)
       throw new Error('eventIds must be an array with a value.');
     if (!Array.isArray(statuses) || statuses.length === 0) {
       throw new Error('statuses must be in the form of an array with a value.');
     }
     const sessionFuncs = eventIds.map(e =>
-      findByEventIdWithStatuses1(e, statuses),
+      findAllByEventIdWithStatuses(e, statuses),
     );
     return Promise.all(sessionFuncs);
   }
@@ -444,7 +444,8 @@ const session = dbInstance => {
     getCountByCommunitySlugDate,
     getSessionStatsByCommunitySlug,
     findByEventIdWithStatuses,
-    findByEventIdWithStatuses1Batch,
+    findAllByEventIdWithStatuses,
+    findAllByEventIdWithStatusesBatch,
   };
 };
 
