@@ -1,0 +1,5 @@
+"Schedule downloads for an event"
+type ScheduleDownload {
+  "Schedule in CSV format"
+  csv: String
+}
