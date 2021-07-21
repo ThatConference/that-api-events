@@ -64,9 +64,11 @@ const order = dbInstance => {
       );
   }
 
-  function findAllOrdersForEvent(eventId) {
+  function findAllCompleteOrdersForEvent(eventId) {
+    dlog('findAllCompleteOrdersForEvent called on event %s', eventId);
     return orderCollection
       .where('event', '==', eventId)
+      .where('status', '==', 'COMPLETE')
       .get()
       .then(querySnapshot => querySnapshot.docs.map(o => ({ id: o.id })));
   }
@@ -104,7 +106,7 @@ const order = dbInstance => {
   return {
     getOrderAllocation,
     findMeOrderAllocationsForEvent,
-    findAllOrdersForEvent,
+    findAllCompleteOrdersForEvent,
     updateOrderAllocation,
     isPinInUse,
   };

@@ -2,12 +2,14 @@ import 'dotenv/config';
 import express from 'express';
 import debug from 'debug';
 import { Firestore } from '@google-cloud/firestore';
+import { Client as Postmark } from 'postmark';
 import responseTime from 'response-time';
 import { v4 as uuidv4 } from 'uuid';
 import * as Sentry from '@sentry/node';
 
 import apolloGraphServer from './graphql';
-// import { version } from '../package.json';
+import envConfig from './envConfig';
+import userEventEmitter from './events/user';
 
 let version;
 (async () => {
@@ -23,6 +25,8 @@ let version;
 const dlog = debug('that:api:events:index');
 const defaultVersion = `that-api-events@${version}`;
 const firestore = new Firestore();
+const postmark = new Postmark(envConfig.postmarkApiToken);
+const userEvents = userEventEmitter(postmark);
 const api = express();
 
 dlog('function instance created');
@@ -45,6 +49,10 @@ const createConfig = () => {
     dataSources: {
       sentry: Sentry,
       firestore,
+      postmark,
+      events: {
+        userEvents,
+      },
     },
   };
 };
