@@ -10,7 +10,13 @@ export const fieldResolvers = {
     checkin: async (
       { eventId },
       { orderAllocationId: allocationId, partnerPin = null },
-      { dataSources: { firestore }, user },
+      {
+        dataSources: {
+          firestore,
+          events: { userEvents },
+        },
+        user,
+      },
     ) => {
       dlog(
         'Registration check-in called on event: %s, allocation: %s, PIN: %s',
@@ -86,7 +92,14 @@ export const fieldResolvers = {
           updateAllocation,
           userId: user.sub,
         })
-        .then(() => result);
+        .then(() => {
+          userEvents.emit('registrationCheckIn', {
+            firestore,
+            memberId: allocation.allocatedTo || null,
+            partnerPin,
+          });
+          return result;
+        });
     },
     revertCheckin: async (
       { eventId },

@@ -7,7 +7,7 @@ export const fieldResolvers = {
   RegistrationQuery: {
     all: ({ eventId }, __, { dataSources: { firestore } }) => {
       dlog('all called for eventId: %s', eventId);
-      return orderStore(firestore).findAllOrdersForEvent(eventId);
+      return orderStore(firestore).findAllCompleteOrdersForEvent(eventId);
     },
   },
 };

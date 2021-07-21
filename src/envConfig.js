@@ -10,6 +10,8 @@ const requiredConfig = () => ({
   sessionNotifSlackChannel: '#that_board',
   defaultProfileImage:
     'https://images.that.tech/members/person-placeholder.jpg',
+  notificationEmailFrom:
+    process.env.NOTIFICATION_EMAIL_FROM || 'hello@thatconference.com',
 });
 
 export default requiredConfig();
