@@ -84,6 +84,7 @@ export const fieldResolvers = {
         checkedInAt: new Date(),
         checkedInBy: user.sub,
         hasCheckedIn: true,
+        receivedSwag: true,
       };
 
       return orderStore(firestore)
@@ -142,6 +143,7 @@ export const fieldResolvers = {
         partnerPin: null,
         checkedInAt: null,
         hasCheckedIn: false,
+        receivedSwag: false,
       };
 
       return orderStore(firestore)
@@ -158,7 +160,7 @@ export const fieldResolvers = {
       { dataSources: { firestore }, user },
     ) => {
       dlog(
-        'Registration check-in called on event: %s, allocation: %s, PIN: %s',
+        'Registration setPatnerPin called on event: %s, allocation: %s, PIN: %s',
         eventId,
         allocationId,
         partnerPin,
@@ -181,7 +183,7 @@ export const fieldResolvers = {
 
       const result = {
         result: false,
-        message: 'not set',
+        message: 'No changes made',
       };
 
       if (!allocation.allocatedTo || allocation?.allocatedTo?.length < 5) {
@@ -200,6 +202,55 @@ export const fieldResolvers = {
 
       const updateAllocation = {
         partnerPin,
+      };
+
+      return orderStore(firestore)
+        .updateOrderAllocation({
+          orderAllocationId: allocationId,
+          updateAllocation,
+          userId: user.sub,
+        })
+        .then(() => result);
+    },
+    setReceivedSwag: async (
+      { eventId },
+      { orderAllocationId: allocationId, received },
+      { dataSources: { firestore }, user },
+    ) => {
+      dlog(
+        'Registration set received swag on event %s, for allocation: %s',
+        eventId,
+        allocationId,
+      );
+      const allocation = await orderStore(firestore).getOrderAllocation(
+        allocationId,
+      );
+      if (!allocation)
+        throw new RegistrationError(
+          `OrderAllocation ${allocationId} not found`,
+        );
+      if (allocation.event !== eventId)
+        throw new RegistrationError(
+          `OrderAllocation ${allocationId} not for current event ${eventId}`,
+        );
+
+      const result = {
+        result: false,
+        message: 'No changes made',
+      };
+      if (!allocation.allocatedTo || allocation?.allocatedTo?.length < 5) {
+        result.message = `Unable to change received swag on unallocated order allocation (${allocation.productType})`;
+      } else if (allocation.hasCheckedIn !== true) {
+        result.message = `This order allocation ${allocationId} is not checked in. Cannot update swag`;
+      } else {
+        result.result = true;
+        result.message = `👕 Received swag updated to ${received}`;
+      }
+
+      if (result.result === false) return result;
+
+      const updateAllocation = {
+        receivedSwag: received,
       };
 
       return orderStore(firestore)

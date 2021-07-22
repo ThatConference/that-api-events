@@ -8,4 +8,7 @@ type RegistrationMutation {
   "Set a pin on a checked-in orderAllocation"
   setPartnerPin(orderAllocationId: ID!, partnerPin: String!): CheckInResult!
     @auth(requires: "volunteer")
+  "Changed received swag: true -> received"
+  setReceivedSwag(orderAllocationId: ID!, received: Boolean!): CheckInResult!
+    @auth(requires: "volunteer")
 }
