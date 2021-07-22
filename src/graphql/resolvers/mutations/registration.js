@@ -188,8 +188,6 @@ export const fieldResolvers = {
         result.message = `Unable to set PIN on unallocated order allocation (${allocation.productType})`;
       } else if (allocation.hasCheckedIn !== true) {
         result.message = `This order allocation ${allocationId} is not checked in. Set pin during check-in`;
-      } else if (allocation.partnerPin && allocation.partnerPin.length > 0) {
-        result.message = `This order allocation already has associated pin: ${allocation.partnerPin}`;
       } else if (isPinInUse) {
         result.message = `Partner PIN ${partnerPin} already in use`;
       } else {
