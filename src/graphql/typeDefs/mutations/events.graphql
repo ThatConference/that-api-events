@@ -2,7 +2,7 @@ type EventsMutation {
   "Create a new event"
   create(event: EventCreateInput!): Event! @auth(requires: "events")
   "Individual event mutations"
-  event(id: ID!): EventMutation @auth(requires: "events")
+  event(id: ID!): EventMutation @auth(requires: "volunteer")
   "favorite/follow and event"
   favoriting(findBy: EventQueryInput!): EventFavoritingMutation
     @auth(requires: "members")
