@@ -1,5 +1,5 @@
 type Mutation {
-  events: EventsMutation @auth(requires: "events")
+  events: EventsMutation @auth(requires: "volunteer")
   venues: VenuesMutation @auth(requires: "admin")
   communities: CommunitiesMutation @auth(requires: "members")
 }
