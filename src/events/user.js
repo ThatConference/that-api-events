@@ -48,6 +48,7 @@ function userEvents(postmark) {
           partnerPin,
         },
       },
+      tag: 'welcome_checkin',
     });
   }
 
