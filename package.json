@@ -1,6 +1,6 @@
 {
   "name": "that-api-events",
-  "version": "1.10.2",
+  "version": "2.0.0",
   "description": "THATConference.com events service",
   "main": "index.js",
   "engines": {
@@ -16,7 +16,8 @@
     "test": "jest --coverage",
     "test:watch": "jest --watchAll",
     "lint": "eslint 'src/**/*.js'",
-    "validate": "concurrently npm:test npm:lint npm:build"
+    "validate": "concurrently npm:test npm:lint npm:build",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@apollo/federation": "0.22.0",
@@ -61,16 +62,11 @@
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-jest": "^24.4.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "husky": "^4.3.8",
+    "husky": "^7.0.2",
     "jest-cli": "^27.1.1",
     "nodemon": "^2.0.12",
     "prettier-eslint": "^13.0.0",
     "prettier-eslint-cli": "^5.0.1"
-  },
-  "husky": {
-    "hooks": {
-      "pre-push": "npm run validate"
-    }
   },
   "jest": {
     "testEnvironment": "node",
