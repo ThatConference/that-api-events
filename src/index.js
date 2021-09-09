@@ -1,3 +1,5 @@
+/* eslint-disable import/no-unresolved */
+/* eslint-disable no-console */
 import 'dotenv/config';
 import express from 'express';
 import debug from 'debug';
@@ -93,6 +95,7 @@ function createUserContext(req, res, next) {
   }
 
   req.userContext = {
+    lcoale: req.headers.lcoale,
     authToken: req.headers.authorization,
     correlationId,
     site,
@@ -105,20 +108,21 @@ function failure(err, req, res, next) {
   dlog('error %o', err);
   Sentry.captureException(err);
 
-  res
-    .set('Content-Type', 'application/json')
-    .status(500)
-    .json(err);
+  res.set('Content-Type', 'application/json').status(500).json(err);
 }
 
-api
-  .use(responseTime())
-  .use(sentryMark)
-  .use(createUserContext)
-  .use(failure);
+api.use(responseTime()).use(sentryMark).use(createUserContext).use(failure);
 
-graphServer.applyMiddleware({ app: api, path: '/' });
-// const port = process.env.PORT || 8001;
-// api.listen({ port }, () => dlog(`events running on %d`, port));
-
-export const handler = api;
+const port = process.env.PORT || 8001;
+graphServer
+  .start()
+  .then(() => {
+    graphServer.applyMiddleware({ app: api, path: '/' });
+    api.listen({ port }, () =>
+      console.log(`Events 🕰 is running 🏃‍♂️ on port 🚢 ${port}`),
+    );
+  })
+  .catch(err => {
+    console.log(`graphServer.start() error 💥: ${err.message}`);
+    throw err;
+  });

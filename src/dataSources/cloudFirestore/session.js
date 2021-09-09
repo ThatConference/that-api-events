@@ -218,9 +218,8 @@ const session = dbInstance => {
       query = query.startAfter(new Date(asOfDate));
     } else if (cursor) {
       const curObject = Buffer.from(cursor, 'base64').toString('utf8');
-      const { curStartTime, curCreatedAt, curEventId, curFilter } = JSON.parse(
-        curObject,
-      );
+      const { curStartTime, curCreatedAt, curEventId, curFilter } =
+        JSON.parse(curObject);
       dlog('decoded cursor:%s, %s, %s', curObject, curStartTime, curCreatedAt);
       if (
         !curStartTime ||
@@ -292,12 +291,8 @@ const session = dbInstance => {
       query = query.startAfter(new Date(asOfDate));
     } else if (cursor) {
       const curObject = Buffer.from(cursor, 'base64').toString('utf8');
-      const {
-        curStartTime,
-        curCreatedAt,
-        curCommunitySlug,
-        curFilter,
-      } = JSON.parse(curObject);
+      const { curStartTime, curCreatedAt, curCommunitySlug, curFilter } =
+        JSON.parse(curObject);
       dlog('decoded cursor:%s, %s, %s', curObject, curStartTime, curCreatedAt);
       if (
         !curStartTime ||

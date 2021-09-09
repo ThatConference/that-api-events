@@ -9,9 +9,9 @@ function createActivityCard({ session, eventName }) {
     type: 'section',
     text: {
       type: 'mrkdwn',
-      text: `*${session.title}*\n<!date^${new Date(
-        session.startTime,
-      ).getTime() / 1000}^{date} @ {time}|dates are hard>`,
+      text: `*${session.title}*\n<!date^${
+        new Date(session.startTime).getTime() / 1000
+      }^{date} @ {time}|dates are hard>`,
     },
     accessory: {
       type: 'button',
