@@ -12,6 +12,9 @@ const requiredConfig = () => ({
     'https://images.that.tech/members/person-placeholder.jpg',
   notificationEmailFrom:
     process.env.NOTIFICATION_EMAIL_FROM || 'hello@thatconference.com',
+  queueUpSocialsAddMonth: JSON.parse(
+    process.env.QUEUE_UP_SOCIALS_ADD_MONTH || false,
+  ),
 });
 
 export default requiredConfig();

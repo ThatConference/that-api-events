@@ -9,7 +9,7 @@ export default function callSlackHook(hookBody) {
   dlog('calling Slack hook');
   if (
     process.env.NODE_ENV === 'production' ||
-    process.env.TEST_SLACK_NOTIFICATIONS === 'true'
+    JSON.parse(process.env.TEST_SLACK_NOTIFICATIONS || false) === true
   ) {
     const slackUrl = envConfig.slackWebhookUrl;
     fetch(slackUrl, {
@@ -28,6 +28,6 @@ export default function callSlackHook(hookBody) {
         });
       });
   } else {
-    dlog('DEVELOPMENT Env: SLACK PAYLOAD TO SEND: %o', hookBody);
+    dlog('DEVELOPMENT Env: SLACK PAYLOAD TO SEND 📢 : %o', hookBody);
   }
 }
