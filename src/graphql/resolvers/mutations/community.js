@@ -138,7 +138,7 @@ export const fieldResolvers = {
           const postText = `${pretext}
 
 ${_session.title}
-${dateformat(startTime, 'dddd, mmmm dS, yyyy "@" h:MM TT Z')}
+Starting at: ${dateformat(startTime, 'dddd, mmmm dS, yyyy "@" h:MM TT Z')} 
 `;
 
           return socialsBuffer.createPost({
