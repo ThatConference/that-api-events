@@ -1,7 +1,7 @@
 import debug from 'debug';
 import { dataSources } from '@thatconference/api';
 import { writeToString } from '@fast-csv/format';
-import moment from 'moment';
+import dateformat from 'dateformat';
 import sessionStore from '../../../dataSources/cloudFirestore/session';
 
 const memberStore = dataSources.cloudFirestore.member;
@@ -48,8 +48,8 @@ export const fieldResolvers = {
         return {
           id: r.id,
           startTime: r.startTime?.toISOString(),
-          day: isDate ? moment(r.startTime).format('dddd') : '',
-          slot: isDate ? moment(r.startTime).format('HH:mm') : '',
+          day: isDate ? dateformat(r.startTime, 'dddd') : '',
+          slot: isDate ? dateformat(r.startTime, 'HH:mm') : '',
           room,
           speaker: speaker.join(';'),
           title: r.title,

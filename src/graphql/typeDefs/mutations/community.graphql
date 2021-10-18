@@ -4,4 +4,9 @@ type CommunityMutation {
     @auth(requires: "communities")
   "Change community slug"
   changeSlug(newSlug: Slug!): Community
+  "Sends digest of future session to Slack. Valid Hours value; 1 - 168. Time used is floor of current hour, e.g. 8:33 -> 8:00; DigestStart defaults to 'CURRENT_HOUR'"
+  sendDigest(hours: Int!, start: DigestStart): [AcceptedSession]
+    @auth(requires: "slack:post")
+  "queues social notifications for upcoming activities. startHoursAhead (default 2) starts at floor of current hour. All activities within that hour x:00 to x:59"
+  queueUpSocials(socials: [BufferSocialProfile!]!, startHoursAhead: Int): Int
 }

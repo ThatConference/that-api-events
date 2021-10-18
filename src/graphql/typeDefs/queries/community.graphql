@@ -4,8 +4,4 @@ type CommunityQuery {
 
   "Stats on a community including all associated events"
   stats: CommunityStats
-
-  # "Sends digest of future session to Slack. Valid Hours value; 1 - 168. Time used is floor of current hour, e.g. 8:33 -> 8:00; DigestStart defaults to 'CURRENT_HOUR'"
-  sendDigest(hours: Int!, start: DigestStart): [AcceptedSession]
-    @auth(requires: "slack:post")
 }
