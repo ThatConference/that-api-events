@@ -110,9 +110,10 @@ const order = dbInstance => {
       memberId,
       orderType,
     );
-    // Datastore does not have orderType populated on all fields at this time
-    // for regular type, we query all, speaker going forward will always be populated.
-    // once order records back-filled/updated tihs can be explicit to type.
+    // Datastore does not have orderType field on all records at this time
+    // for regular type, we query same as all,
+    // speaker going forward will always be populated.
+    // once order records back-filled/updated this can be explicit for any type.
     let query = orderCollection
       .where('event', '==', eventId)
       .where('member', '==', memberId);

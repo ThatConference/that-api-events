@@ -9,7 +9,7 @@ type EventAcceptedSpeaker {
   agreeToSpeak: Boolean
   "Status of accepted speaker engagement (enum)"
   status: EventAcceptedSpeakerStatus
-  "Platform speaker presenting on"
+  "Platform speaker presenting on (AT/ON)"
   platform: EventPlatform
   "Timestamp when speaking engagement accepted or rejected"
   rsvpAt: Date

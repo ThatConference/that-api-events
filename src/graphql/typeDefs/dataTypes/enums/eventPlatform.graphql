@@ -1,4 +1,6 @@
 enum EventPlatform {
+  "AT THAT"
   AT_THAT
+  "ON THAT"
   ON_THAT
 }

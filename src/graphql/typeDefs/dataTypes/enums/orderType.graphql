@@ -1,7 +1,7 @@
 enum OrderType {
   "Regular order"
   REGULAR
-  "Order for speaker products"
+  "Speaker order"
   SPEAKER
   "Partner order"
   PARTNER
