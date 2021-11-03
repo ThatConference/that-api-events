@@ -41,7 +41,8 @@ const demos = dbInstance => {
         throw new Error(
           'questionText value missing, unable to save demographic responses',
         );
-      if (!response.questionResponse === null) response.questionResponse = null;
+      if (response.questionResponse === undefined)
+        response.questionResponse = null;
 
       response.eventId = eventId;
       response.memberId = memberId;
