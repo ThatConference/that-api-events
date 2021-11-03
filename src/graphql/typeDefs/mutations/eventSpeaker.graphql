@@ -1,0 +1,9 @@
+type EventSpeakerMutation {
+  "Selected speakers indicate if they accept their speaking engagement"
+  acceptToSpeak(agreeToSpeak: Boolean!, reason: String): EventMeResult!
+    @auth(requires: "members")
+  "Does the speaker wish to accept their room benefit"
+  acceptRoomBenefit(accept: Boolean!): EventMeResult! @auth(requires: "members")
+  "Mark Event Accepted Speaker complete"
+  completeEnrollment: EventMeResult! @auth(requires: "members")
+}

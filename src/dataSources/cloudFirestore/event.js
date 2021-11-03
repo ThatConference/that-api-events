@@ -2,19 +2,10 @@ import debug from 'debug';
 import { utility } from '@thatconference/api';
 
 const dlog = debug('that:api:events:datasources:firebase:event');
-const { entityDateForge } = utility.firestoreDateForge;
-const forgeFields = [
-  'startDate',
-  'endDate',
-  'voteOpenDate',
-  'voteCloseDate',
-  'callForSpeakersOpenDate',
-  'callForSpeakersCloseDate',
-];
-const eventDateForge = entityDateForge({ fields: forgeFields });
+const eventDateForge = utility.firestoreDateForge.events;
 
 const event = dbInstance => {
-  dlog('instance created');
+  dlog('event instance created');
 
   const collectionName = 'events';
   const eventsCol = dbInstance.collection(collectionName);

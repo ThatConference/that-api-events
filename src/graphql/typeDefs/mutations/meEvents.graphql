@@ -1,0 +1,9 @@
+type MeEventsMutation {
+  "favorite/follow and event"
+  favoriting: EventFavoritingMutation @auth(requires: "members")
+  "Event speaker mutations"
+  speaker: EventSpeakerMutation @auth(requires: "members")
+  "Save demographic responses for event"
+  saveDemos(responses: [DemoResponseInput]!): EventMeResult!
+    @auth(requires: "members")
+}

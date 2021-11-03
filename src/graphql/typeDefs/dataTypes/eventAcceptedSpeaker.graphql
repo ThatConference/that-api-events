@@ -1,0 +1,16 @@
+type EventAcceptedSpeaker {
+  "event speaker is part of"
+  eventId: ID!
+  "member"
+  memberId: ID!
+  "is the member an accepted speaker for the event"
+  isAcceptedSpeaker: Boolean!
+  "has the member accepted the speaking engagement"
+  agreeToSpeak: Boolean
+  "Status of accepted speaker engagement (enum)"
+  status: EventAcceptedSpeakerStatus
+  "Platform speaker presenting on (AT/ON)"
+  platform: EventPlatform
+  "Timestamp when speaking engagement accepted or rejected"
+  rsvpAt: Date
+}

@@ -1,0 +1,8 @@
+input DemoResponseInput {
+  "Question Reference. Ensure unique across all responses"
+  questionRef: Int!
+  "Question text"
+  questionText: String!
+  "Question response text"
+  questionResponse: String!
+}

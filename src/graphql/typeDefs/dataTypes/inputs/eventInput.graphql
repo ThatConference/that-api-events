@@ -58,14 +58,17 @@ input EventCreateInput {
   "date/time when session voting closes for event"
   voteCloseDate: Date
 
-  "DEPRECATED: is call for speakers open or not"
-  isCallForSpeakersOpen: Boolean @deprecated
-
   "date/time when call for speakers opens for event"
   callForSpeakersOpenDate: Date
 
   "date/time when call for speakers closes for event"
   callForSpeakersCloseDate: Date
+
+  "date/time when ON THAT call for speakers opens"
+  callForOnSpeakersOpenDate: Date
+
+  "date/time when ON THAT call for speakers closes"
+  callForOnSpeakersCloseDate: Date
 
   "When true a ticket is required to mutate session in this event"
   isTicketRequiredToMutate: Boolean
@@ -150,14 +153,17 @@ input EventUpdateInput {
   "date/time when session voting closes for event"
   voteCloseDate: Date
 
-  "DEPRECATED: is call for speakers open or not"
-  isCallForSpeakersOpen: Boolean @deprecated
-
   "date/time when call for speakers opens for event"
   callForSpeakersOpenDate: Date
 
   "date/time when call for speakers closes for event"
   callForSpeakersCloseDate: Date
+
+  "date/time when ON THAT call for speakers opens"
+  callForOnSpeakersOpenDate: Date
+
+  "date/time when ON THAT call for speakers closes"
+  callForOnSpeakersCloseDate: Date
 
   "When true a ticket is required to mutate session in this event"
   isTicketRequiredToMutate: Boolean

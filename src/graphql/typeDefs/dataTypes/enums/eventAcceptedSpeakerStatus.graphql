@@ -1,0 +1,8 @@
+enum EventAcceptedSpeakerStatus {
+  "Not Started"
+  NOT_STARTED
+  "In Progress"
+  IN_PROGRESS
+  "Complete"
+  COMPLETE
+}

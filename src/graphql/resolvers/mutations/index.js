@@ -25,6 +25,8 @@ import { fieldResolvers as eventFavoriting } from './eventFavoriting';
 import { fieldResolvers as eventProductFields } from './eventProduct';
 
 import { fieldResolvers as registrationFields } from './registration';
+import { fieldResolvers as eventSpeakerFields } from './eventSpeaker';
+import { fieldResolvers as meEventsFields } from './meEvents';
 
 export default {
   ...rootMutations,
@@ -48,4 +50,6 @@ export const fieldResolvers = {
   ...eventFavoriting,
   ...eventProductFields,
   ...registrationFields,
+  ...eventSpeakerFields,
+  ...meEventsFields,
 };
