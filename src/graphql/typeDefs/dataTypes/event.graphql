@@ -91,6 +91,12 @@ type Event @key(fields: "id") {
   "date/time when call for speakers closes for event"
   callForSpeakersCloseDate: Date
 
+  "date/time when ON THAT call for speakers opens"
+  callForOnSpeakersOpenDate: Date
+
+  "date/time when ON THAT call for speakers closes"
+  callForOnSpeakersCloseDate: Date
+
   "When true a ticket is required to mutate session in this event"
   isTicketRequiredToMutate: Boolean
 

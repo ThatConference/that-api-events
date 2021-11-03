@@ -126,6 +126,23 @@ export const fieldResolvers = {
       dlog('products for event called %s', eventId);
       return productStore(firestore).findAllEnabled({ eventId });
     },
+    isCallForOnSpeakersOpen: ({
+      callForOnSpeakersOpenDate,
+      callForOnSpeakersCloseDate,
+    }) => {
+      const now = new Date();
+      if (
+        !(callForOnSpeakersOpenDate instanceof Date) ||
+        !(callForOnSpeakersCloseDate instanceof Date)
+      )
+        return false;
+
+      return (
+        callForOnSpeakersOpenDate < callForOnSpeakersCloseDate &&
+        now > callForOnSpeakersOpenDate &&
+        now < callForOnSpeakersCloseDate
+      );
+    },
     isCallForSpeakersOpen: ({
       callForSpeakersOpenDate,
       callForSpeakersCloseDate,
