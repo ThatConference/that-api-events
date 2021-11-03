@@ -103,12 +103,36 @@ const order = dbInstance => {
       .then(querySnap => querySnap.size > 0);
   }
 
+  function findOrderByEventMemberType({ eventId, memberId, orderType }) {
+    dlog(
+      'findOrderByEventMemberType called e:%s, m:%s, t:%s',
+      eventId,
+      memberId,
+      orderType,
+    );
+    // Datastore does not have orderType populated on all fields at this time
+    // for regular type, we query all, speaker going forward will always be populated.
+    // once order records back-filled/updated tihs can be explicit to type.
+    let query = orderCollection
+      .where('event', '==', eventId)
+      .where('member', '==', memberId);
+    if (orderType === 'SPEAKER') {
+      query = query.where('orderType', '==', orderType);
+    }
+    query = query.select();
+
+    return query
+      .get()
+      .then(querySnapshot => querySnapshot.docs.map(q => ({ id: q.id })));
+  }
+
   return {
     getOrderAllocation,
     findMeOrderAllocationsForEvent,
     findAllCompleteOrdersForEvent,
     updateOrderAllocation,
     isPinInUse,
+    findOrderByEventMemberType,
   };
 };
 

@@ -6,4 +6,8 @@ type MeEventQuery {
     @deprecated(reason: "Use access path off of me instead")
   "Event Access information for the logged in user"
   access(eventId: ID!): MeEventAccessQuery @auth(requires: "members")
+  "Me accepted speaker information for an event"
+  acceptedSpeaker(findBy: EventQueryInput!): EventAcceptedSpeaker!
+  "Me orders associated with targeted event. OrderType default: 'REGULAR'"
+  orders(findBy: EventQueryInput!, orderType: OrderType): [Order]!
 }

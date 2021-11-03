@@ -2,8 +2,11 @@ type EventsMutation {
   "Create a new event"
   create(event: EventCreateInput!): Event! @auth(requires: "events")
   "Individual event mutations"
-  event(id: ID!): EventMutation @auth(requires: "volunteer")
+  event(id: ID!): EventMutation @auth(requires: "members")
   "favorite/follow and event"
   favoriting(findBy: EventQueryInput!): EventFavoritingMutation
     @auth(requires: "members")
+    @deprecated(reason: "Use me/favoring instead")
+  "Event mutations me path"
+  me(findBy: EventQueryInput!): MeEventsMutation @auth(requires: "members")
 }

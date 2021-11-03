@@ -1,0 +1,6 @@
+type EventMeResult {
+  "Was the update successful"
+  success: Boolean!
+  "message on the update"
+  message: String!
+}

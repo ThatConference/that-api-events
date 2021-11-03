@@ -1,0 +1,4 @@
+enum EventPlatform {
+  AT_THAT
+  ON_THAT
+}

@@ -15,5 +15,9 @@ export const fieldResolvers = {
       dlog('favoriting %o', findBy);
       return eventFindBy(findBy, firestore);
     },
+    me: (_, { findBy }, { dataSources: { firestore } }) => {
+      dlog('events/me on %o', findBy);
+      return eventFindBy(findBy, firestore);
+    },
   },
 };
