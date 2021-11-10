@@ -3,6 +3,7 @@ import { dataSources } from '@thatconference/api';
 import checkMemberEventAccess from '../../../lib/checkMemberEventAccess';
 import eventFindBy from '../../../lib/eventFindBy';
 import orderStore from '../../../dataSources/cloudFirestore/order';
+import demoResponseStore from '../../../dataSources/cloudFirestore/demoResponses';
 
 const eventSpeakerStore = dataSources.cloudFirestore.eventSpeaker;
 
@@ -40,6 +41,17 @@ export const fieldResolvers = {
           memberId: user.sub,
           orderType,
         }),
+      );
+    },
+    isDemosComplete: (_, { findBy }, { dataSources: { firestore }, user }) => {
+      dlog('me isDemosComplete called');
+      return eventFindBy(findBy, firestore).then(({ eventId }) =>
+        demoResponseStore(firestore)
+          .getResponseCount({
+            eventId,
+            memberId: user.sub,
+          })
+          .then(count => count > 0),
       );
     },
   },

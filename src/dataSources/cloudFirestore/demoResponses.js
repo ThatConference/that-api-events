@@ -54,7 +54,16 @@ const demos = dbInstance => {
     return batchWriter.commit();
   }
 
-  return { findByEventMember, saveResponses };
+  function getResponseCount({ eventId, memberId }) {
+    return demoCollection
+      .where('eventId', '==', eventId)
+      .where('memberId', '==', memberId)
+      .select()
+      .get()
+      .then(querySnap => querySnap.size);
+  }
+
+  return { findByEventMember, saveResponses, getResponseCount };
 };
 
 export default demos;
