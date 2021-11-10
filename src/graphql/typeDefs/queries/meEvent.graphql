@@ -10,4 +10,6 @@ type MeEventQuery {
   acceptedSpeaker(findBy: EventQueryInput!): EventAcceptedSpeaker!
   "Me orders associated with targeted event. OrderType default: 'REGULAR'"
   orders(findBy: EventQueryInput!, orderType: OrderType): [Order]!
+  "Has member completed demographic questions for this event?"
+  isDemosComplete(findBy: EventQueryInput!): Boolean!
 }
