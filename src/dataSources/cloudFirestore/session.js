@@ -426,6 +426,22 @@ const session = dbInstance => {
     return Promise.all(sessionFuncs);
   }
 
+  function findAcceptedByEventIdSpeaker({ eventId, memberId }) {
+    dlog(
+      'findAllByEventIdMemberId called event: %s, member: %s',
+      eventId,
+      memberId,
+    );
+
+    return sessionsCollection
+      .where('eventId', '==', eventId)
+      .where('speakers', 'array-contains', memberId)
+      .where('status', 'in', activeSessionStatuses)
+      .select()
+      .get()
+      .then(querySnap => querySnap.docs.map(s => ({ id: s.id })));
+  }
+
   return {
     findAllApprovedByEventId,
     findAllAcceptedByEventId,
@@ -441,6 +457,7 @@ const session = dbInstance => {
     findByEventIdWithStatuses,
     findAllByEventIdWithStatuses,
     findAllByEventIdWithStatusesBatch,
+    findAcceptedByEventIdSpeaker,
   };
 };
 

@@ -13,4 +13,6 @@ type EventAcceptedSpeaker {
   platform: EventPlatform
   "Timestamp when speaking engagement accepted or rejected"
   rsvpAt: Date
+  "Accepted sessions for this speaker"
+  sessions: [AcceptedSession]!
 }
