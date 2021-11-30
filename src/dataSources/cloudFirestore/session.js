@@ -442,6 +442,26 @@ const session = dbInstance => {
       .then(querySnap => querySnap.docs.map(s => ({ id: s.id })));
   }
 
+  function findAllSpeakersForEvent({ eventId }) {
+    dlog('finding all speakers for event: %s', eventId);
+
+    return sessionsCollection
+      .where('eventId', '==', eventId)
+      .where('status', 'in', approvedSessionStatuses)
+      .select('speakers')
+      .get()
+      .then(querySnap => {
+        dlog('returned session count: %d', querySnap.size);
+        const eventSpeakers = new Set();
+        const records = querySnap.docs.map(qs => ({
+          id: qs.id,
+          ...qs.data(),
+        }));
+        records.forEach(r => r.speakers.forEach(sp => eventSpeakers.add(sp)));
+        return [...eventSpeakers].map(es => ({ id: es }));
+      });
+  }
+
   return {
     findAllApprovedByEventId,
     findAllAcceptedByEventId,
@@ -458,6 +478,7 @@ const session = dbInstance => {
     findAllByEventIdWithStatuses,
     findAllByEventIdWithStatusesBatch,
     findAcceptedByEventIdSpeaker,
+    findAllSpeakersForEvent,
   };
 };
 

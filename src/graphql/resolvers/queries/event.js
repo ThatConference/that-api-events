@@ -165,5 +165,9 @@ export const fieldResolvers = {
       return result;
     },
     scheduleDownload: ({ id: eventId }) => ({ eventId }),
+    speakers: ({ id: eventId }, __, { dataSources: { firestore } }) => {
+      dlog('event speakers resolver called');
+      return sessionStore(firestore).findAllSpeakersForEvent({ eventId });
+    },
   },
 };

@@ -135,4 +135,7 @@ type Event @key(fields: "id") {
 
   "products available from this event"
   products: [Product]
+
+  "counselors/speakers with sessions in this event"
+  speakers: [PublicProfile]
 }
