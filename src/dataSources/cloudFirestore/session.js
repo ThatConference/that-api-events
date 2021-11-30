@@ -195,7 +195,9 @@ const session = dbInstance => {
   }) {
     dlog('findByCommunityWithStatuses %s, %o', eventId, statuses);
     const inStatus = validateStatuses(statuses);
-    const truePSize = Math.min(pageSize || 20, 100); // max page: 100
+    const maxPageSize = 255;
+    if (pageSize > maxPageSize)
+      throw new Error(`Max page size is ${maxPageSize}`);
     let allOrderBy = 'desc';
     if (orderBy === 'START_TIME_ASC') allOrderBy = 'asc';
 
@@ -211,7 +213,7 @@ const session = dbInstance => {
       .where('status', 'in', inStatus)
       .orderBy('startTime', startTimeOrder)
       .orderBy('createdAt', 'asc')
-      .limit(truePSize)
+      .limit(pageSize)
       .select('startTime', 'createdAt');
 
     if (asOfDate && !cursor) {
