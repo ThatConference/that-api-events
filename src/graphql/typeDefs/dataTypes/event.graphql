@@ -60,7 +60,12 @@ type Event @key(fields: "id") {
   # "The list of sessions for a given event, onOrAfter: OPTIONAL, Returns results including date and after, daysAfter: OPTIONAL, Number of days to include after onOrAfter date"
   # sessions(onOrAfter: Date, daysAfter: Int): [AcceptedSession]
 
-  "Any event sessions. Defaults: status: [APPROVED], filter: UPCOMING, pageSize: 20 (max: 100). orderBy only valid with filter: ALL (and defaults desc). DOES NOT RETURN SESSIONS WITHOUT STARTTIME FIELD"
+  """
+  Any event sessions.
+  Defaults: status: [APPROVED], filter: UPCOMING, pageSize: 20 (max: 255).
+  orderBy only valid with filter: ALL (and defaults desc).
+  DOES NOT RETURN SESSIONS WITHOUT STARTTIME FIELD
+  """
   sessions(
     status: [SessionStatus]
     orderBy: SessionOrderBy
@@ -135,4 +140,7 @@ type Event @key(fields: "id") {
 
   "products available from this event"
   products: [Product]
+
+  "counselors/speakers with sessions in this event"
+  speakers: [PublicProfile]
 }

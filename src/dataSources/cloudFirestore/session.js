@@ -195,7 +195,9 @@ const session = dbInstance => {
   }) {
     dlog('findByCommunityWithStatuses %s, %o', eventId, statuses);
     const inStatus = validateStatuses(statuses);
-    const truePSize = Math.min(pageSize || 20, 100); // max page: 100
+    const maxPageSize = 255;
+    if (pageSize > maxPageSize)
+      throw new Error(`Max page size is ${maxPageSize}`);
     let allOrderBy = 'desc';
     if (orderBy === 'START_TIME_ASC') allOrderBy = 'asc';
 
@@ -211,7 +213,7 @@ const session = dbInstance => {
       .where('status', 'in', inStatus)
       .orderBy('startTime', startTimeOrder)
       .orderBy('createdAt', 'asc')
-      .limit(truePSize)
+      .limit(pageSize)
       .select('startTime', 'createdAt');
 
     if (asOfDate && !cursor) {
@@ -442,6 +444,26 @@ const session = dbInstance => {
       .then(querySnap => querySnap.docs.map(s => ({ id: s.id })));
   }
 
+  function findAllSpeakersForEvent({ eventId }) {
+    dlog('finding all speakers for event: %s', eventId);
+
+    return sessionsCollection
+      .where('eventId', '==', eventId)
+      .where('status', 'in', approvedSessionStatuses)
+      .select('speakers')
+      .get()
+      .then(querySnap => {
+        dlog('returned session count: %d', querySnap.size);
+        const eventSpeakers = new Set();
+        const records = querySnap.docs.map(qs => ({
+          id: qs.id,
+          ...qs.data(),
+        }));
+        records.forEach(r => r.speakers.forEach(sp => eventSpeakers.add(sp)));
+        return [...eventSpeakers].map(es => ({ id: es }));
+      });
+  }
+
   return {
     findAllApprovedByEventId,
     findAllAcceptedByEventId,
@@ -458,6 +480,7 @@ const session = dbInstance => {
     findAllByEventIdWithStatuses,
     findAllByEventIdWithStatusesBatch,
     findAcceptedByEventIdSpeaker,
+    findAllSpeakersForEvent,
   };
 };
 
