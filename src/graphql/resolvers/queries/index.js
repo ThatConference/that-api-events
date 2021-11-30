@@ -15,6 +15,8 @@ import { fieldResolvers as meEventAccessFields } from './meEventAccess';
 import { fieldResolvers as registrationQueryFields } from './registration';
 import { fieldResolvers as scheduleDownload } from './scheduleDownload';
 import { fieldResolvers as eventAcceptedSpeakerFields } from './eventAcceptedSpeaker';
+import { fieldResolvers as eventAdminFields } from './eventAdmin';
+import { fieldResolvers as acceptedSpeakerFields } from './acceptedSpeaker';
 
 export default {
   ...root,
@@ -37,4 +39,6 @@ export const fieldResolvers = {
   ...registrationQueryFields,
   ...scheduleDownload,
   ...eventAcceptedSpeakerFields,
+  ...eventAdminFields,
+  ...acceptedSpeakerFields,
 };

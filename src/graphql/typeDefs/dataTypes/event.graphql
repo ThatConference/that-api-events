@@ -143,4 +143,7 @@ type Event @key(fields: "id") {
 
   "counselors/speakers with sessions in this event"
   speakers: [PublicProfile]
+
+  "admin event queries for this event"
+  admin: EventAdminQuery
 }

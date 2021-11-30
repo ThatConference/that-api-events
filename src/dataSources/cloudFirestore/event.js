@@ -9,6 +9,7 @@ const event = dbInstance => {
 
   const collectionName = 'events';
   const eventsCol = dbInstance.collection(collectionName);
+  const acceptedSpeakersCollectionname = 'acceptedSpeakers';
 
   const findBySlug = async slug => {
     dlog('find by slug');
@@ -258,6 +259,40 @@ const event = dbInstance => {
     return result;
   }
 
+  function getAcceptedSpeakersForEvent({
+    eventId,
+    platform,
+    status,
+    agreedToSpeak,
+  }) {
+    dlog('getting accepted speakers for event %s', eventId);
+    dlog(
+      'getAcceptedSpeakersForEvent: %s,%s,%s,%s',
+      eventId,
+      platform,
+      status,
+      agreedToSpeak,
+    );
+
+    let query = eventsCol
+      .doc(eventId)
+      .collection(acceptedSpeakersCollectionname);
+
+    if (platform) {
+      query = query.where('platform', '==', platform);
+    }
+    if (status) {
+      query = query.where('status', '==', status);
+    }
+    if (agreedToSpeak !== undefined && agreedToSpeak !== null) {
+      query = query.where('agreeToSpeak', '==', agreedToSpeak);
+    }
+
+    return query
+      .get()
+      .then(querySnap => querySnap.docs.map(d => ({ id: d.id, ...d.data() })));
+  }
+
   return {
     create,
     getAll,
@@ -274,6 +309,7 @@ const event = dbInstance => {
     getCountByCommunitySlug,
     findIdFromSlug,
     getSlug,
+    getAcceptedSpeakersForEvent,
   };
 };
 

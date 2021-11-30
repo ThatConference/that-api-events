@@ -69,7 +69,7 @@ export const fieldResolvers = {
         filter = 'UPCOMING',
         orderBy,
         asOfDate,
-        pageSize,
+        pageSize = 20,
         cursor,
       },
       { dataSources: { firestore } },
@@ -169,5 +169,6 @@ export const fieldResolvers = {
       dlog('event speakers resolver called');
       return sessionStore(firestore).findAllSpeakersForEvent({ eventId });
     },
+    admin: ({ id: eventId }) => ({ eventId }),
   },
 };
