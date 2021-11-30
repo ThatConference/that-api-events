@@ -190,7 +190,7 @@ const session = dbInstance => {
     orderBy,
     filter,
     asOfDate,
-    pageSize,
+    pageSize = 20,
     cursor,
   }) {
     dlog('findByCommunityWithStatuses %s, %o', eventId, statuses);
