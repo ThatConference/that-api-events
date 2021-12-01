@@ -1,0 +1,24 @@
+"""
+Admin View
+Accepted Speaker fields, data from acceptedSpeaker collection usually
+"""
+type AcceptedSpeaker {
+  "memberId"
+  id: ID!
+  "Reference back to member type"
+  member: Profile!
+  "Has member agreed to this speaking engagement?"
+  agreeToSpeak: Boolean!
+  "Reason why member didn't accept speaking engagement"
+  reason: String
+  "platform presenting on (ON/AT)"
+  platform: EventPlatform!
+  "Current status of Accepted Speaker enrollment"
+  status: EventAcceptedSpeakerStatus!
+  "Date/Time the speaker enrollment was responded to"
+  rsvpAt: Date
+  "Did the speaker donate back their room benefit?"
+  acceptRoomBenefit: Boolean
+  "The order associated with the speaker enrollment"
+  order: Order
+}

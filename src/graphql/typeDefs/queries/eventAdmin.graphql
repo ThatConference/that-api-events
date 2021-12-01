@@ -1,0 +1,8 @@
+type EventAdminQuery {
+  """
+  Leave options blank for no filtering for those fields
+  All accepted speakers for this event (from accepted speaker sub-collection)
+  """
+  acceptedSpeakers(filters: AcceptedSpeakersFiltersInput!): [AcceptedSpeaker]!
+    @auth(requires: "admin")
+}
