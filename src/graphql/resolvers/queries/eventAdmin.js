@@ -8,16 +8,18 @@ export const fieldResolvers = {
   EventAdminQuery: {
     acceptedSpeakers: (
       { eventId },
-      { platform, status, agreedToSpeak },
+      { filters },
       { dataSources: { firestore } },
     ) => {
       dlog('eventAdmin acceptedSpeakers resolver called');
-
+      const { platform, statuses, agreedToSpeak, acceptedRoomBenefit } =
+        filters;
       return eventStore(firestore).getAcceptedSpeakersForEvent({
         eventId,
         platform,
-        status,
+        statuses,
         agreedToSpeak,
+        acceptedRoomBenefit,
       });
     },
   },

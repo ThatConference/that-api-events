@@ -262,15 +262,16 @@ const event = dbInstance => {
   function getAcceptedSpeakersForEvent({
     eventId,
     platform,
-    status,
+    statuses,
     agreedToSpeak,
+    acceptedRoomBenefit,
   }) {
     dlog('getting accepted speakers for event %s', eventId);
     dlog(
       'getAcceptedSpeakersForEvent: %s,%s,%s,%s',
       eventId,
       platform,
-      status,
+      statuses,
       agreedToSpeak,
     );
 
@@ -278,14 +279,19 @@ const event = dbInstance => {
       .doc(eventId)
       .collection(acceptedSpeakersCollectionname);
 
+    if (statuses) {
+      if (!Array.isArray(statuses))
+        throw new Error('statuses must be in the form of an array');
+      query = query.where('status', 'in', statuses);
+    }
     if (platform) {
       query = query.where('platform', '==', platform);
     }
-    if (status) {
-      query = query.where('status', '==', status);
-    }
     if (agreedToSpeak !== undefined && agreedToSpeak !== null) {
       query = query.where('agreeToSpeak', '==', agreedToSpeak);
+    }
+    if (acceptedRoomBenefit !== undefined && acceptedRoomBenefit !== null) {
+      query = query.where('acceptRoomBenefit', '==', acceptedRoomBenefit);
     }
 
     return query

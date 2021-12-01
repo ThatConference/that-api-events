@@ -1,0 +1,14 @@
+"""
+Use the following values to filter the list of accepted speakers return
+leave blank to accept all values of that type
+"""
+input AcceptedSpeakersFiltersInput {
+  "The platform presenting on (ON/AT)"
+  platform: EventPlatform
+  "The status of the speaker enrollment. Accepts multiple values"
+  statuses: [EventAcceptedSpeakerStatus]
+  "Has the speaker agreed to speak. False is initial value when not_started"
+  agreedToSpeak: Boolean
+  "Has the speaker returned their room benefit. False is the initial value when not_started"
+  acceptedRoomBenefit: Boolean
+}
