@@ -2,6 +2,7 @@ import debug from 'debug';
 import { constants } from '@thatconference/api';
 import { RegistrationError } from '../../../lib/errors';
 import orderStore from '../../../dataSources/cloudFirestore/order';
+import eventStore from '../../../dataSources/cloudFirestore/event';
 
 const dlog = debug('that:api:events:mutations:registration');
 
@@ -34,8 +35,9 @@ export const fieldResolvers = {
         // null pin is fine and we'll write that to allocation. Promise.all returns `false`
         funcs.push(false);
       }
+      funcs.push(eventStore(firestore).getSlug(eventId));
 
-      const [allocation, isPinInUse] = await Promise.all(funcs);
+      const [allocation, isPinInUse, _eventSlug] = await Promise.all(funcs);
 
       if (!allocation)
         throw new RegistrationError(
@@ -45,6 +47,7 @@ export const fieldResolvers = {
         throw new RegistrationError(
           `OrderAllocation ${allocationId} not for current event ${eventId}`,
         );
+      const eventSlug = _eventSlug ?? '';
 
       const result = {
         result: false,
@@ -98,6 +101,7 @@ export const fieldResolvers = {
             firestore,
             memberId: allocation.allocatedTo || null,
             partnerPin,
+            eventSlug,
           });
           return result;
         });

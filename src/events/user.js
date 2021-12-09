@@ -12,7 +12,12 @@ function userEvents(postmark) {
   const userEventEmitter = new EventEmitter();
   dlog('user event emitter created');
 
-  async function sendCheckinWelcomeEmail({ memberId, firestore, partnerPin }) {
+  async function sendCheckinWelcomeEmail({
+    memberId,
+    firestore,
+    partnerPin,
+    eventSlug,
+  }) {
     dlog('sendCheckinWelcomeEmail called for %s', memberId);
     // may be an unallocated ticket and doesn't have a memberId assigned
     if (!memberId) return undefined;
@@ -46,6 +51,9 @@ function userEvents(postmark) {
           firstName: member.firstName,
           lastName: member.lastName,
           partnerPin,
+        },
+        event: {
+          slug: eventSlug,
         },
       },
       tag: 'welcome_checkin',
