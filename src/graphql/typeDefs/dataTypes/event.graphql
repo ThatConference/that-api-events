@@ -78,8 +78,8 @@ type Event @key(fields: "id") {
   "Downloadable Schedule formats"
   scheduleDownload: ScheduleDownload
 
-  "DEPRECATED: is voting for this event open or not"
-  isVotingOpen: Boolean @deprecated
+  "Calculated based on NOW and voting open and close dates"
+  isVotingOpen: Boolean
 
   "date/time when session voting opens for event"
   voteOpenDate: Date

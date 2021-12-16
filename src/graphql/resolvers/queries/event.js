@@ -46,6 +46,12 @@ export const fieldResolvers = {
     },
     notifications: notificationResolver.notifications,
     milestones: milestoneResolver.milestones,
+    isVotingOpen: ({ voteOpenDate, voteCloseDate }) => {
+      const now = new Date().getTime();
+      const open = new Date(voteOpenDate).getTime();
+      const close = new Date(voteCloseDate).getTime();
+      return now >= open && now <= close;
+    },
     venues: ({ venues }, args, { dataSources: { firestore } }) => {
       dlog('Event:venues');
       return venueStore(firestore).findByIds(venues);
