@@ -1,6 +1,5 @@
 // ensures google tracing is first thing loaded.
-import 'dotenv/config';
-
+require('dotenv').config();
 require('@google-cloud/trace-agent').start({
   logLevel: 2,
   enhancedDatabaseReporting: true,

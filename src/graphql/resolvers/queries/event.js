@@ -46,12 +46,6 @@ export const fieldResolvers = {
     },
     notifications: notificationResolver.notifications,
     milestones: milestoneResolver.milestones,
-    isVotingOpen: ({ voteOpenDate, voteCloseDate }) => {
-      const now = new Date().getTime();
-      const open = new Date(voteOpenDate).getTime();
-      const close = new Date(voteCloseDate).getTime();
-      return now >= open && now <= close;
-    },
     venues: ({ venues }, args, { dataSources: { firestore } }) => {
       dlog('Event:venues');
       return venueStore(firestore).findByIds(venues);
@@ -160,15 +154,19 @@ export const fieldResolvers = {
       )
         return false;
 
-      let result = false;
-      if (
+      return (
         callForSpeakersOpenDate < callForSpeakersCloseDate &&
         now > callForSpeakersOpenDate &&
         now < callForSpeakersCloseDate
-      )
-        result = true;
-
-      return result;
+      );
+    },
+    isVotingOpen: ({ voteOpenDate, voteCloseDate }) => {
+      if (!(voteOpenDate instanceof Date) || !(voteCloseDate instanceof Date))
+        return false;
+      const now = new Date().getTime();
+      const open = new Date(voteOpenDate).getTime();
+      const close = new Date(voteCloseDate).getTime();
+      return now >= open && now <= close;
     },
     scheduleDownload: ({ id: eventId }) => ({ eventId }),
     speakers: ({ id: eventId }, __, { dataSources: { firestore } }) => {
