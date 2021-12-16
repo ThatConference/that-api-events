@@ -1,6 +1,5 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable no-console */
-import 'dotenv/config';
 import express from 'express';
 import debug from 'debug';
 import { Firestore } from '@google-cloud/firestore';
