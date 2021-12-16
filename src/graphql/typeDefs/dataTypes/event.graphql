@@ -87,8 +87,11 @@ type Event @key(fields: "id") {
   "date/time when session voting closes for event"
   voteCloseDate: Date
 
-  "is call for speakers open or not, calculated based on date fields"
+  "is call for speakers AT THAT open or not, calculated"
   isCallForSpeakersOpen: Boolean!
+
+  "is call for speakers ON THAT open or not. Calculated"
+  isCallForOnSpeakersOpen: Boolean!
 
   "date/time when call for speakers opens for event"
   callForSpeakersOpenDate: Date
