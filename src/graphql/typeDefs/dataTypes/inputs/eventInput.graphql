@@ -49,9 +49,6 @@ input EventCreateInput {
   "Email providers reference to template used for transactional email of purchased ticket for event"
   emailTemplateTicketPurchased: String
 
-  "is voting for this event open or not"
-  isVotingOpen: Boolean @deprecated
-
   "date/time when session voting opens for event"
   voteOpenDate: Date
 
@@ -143,9 +140,6 @@ input EventUpdateInput {
 
   "Email providers reference to template used for transactional email of purchased ticket for event"
   emailTemplateTicketPurchased: String
-
-  "DEPRECATED: is voting for this event open or not"
-  isVotingOpen: Boolean @deprecated
 
   "date/time when session voting opens for event"
   voteOpenDate: Date
