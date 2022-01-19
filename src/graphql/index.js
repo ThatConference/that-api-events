@@ -1,6 +1,7 @@
 import { isNil } from 'lodash';
-import { ApolloServer, SchemaDirectiveVisitor } from 'apollo-server-express';
-import { buildFederatedSchema } from '@apollo/federation';
+import { ApolloServer } from 'apollo-server-express';
+import { SchemaDirectiveVisitor } from '@graphql-tools/utils';
+import { buildSubgraphSchema } from '@apollo/subgraph';
 import debug from 'debug';
 import { security } from '@thatconference/api';
 import DataLoader from 'dataloader';
@@ -29,7 +30,7 @@ const createServer = ({ dataSources }) => {
   dlog('creating apollo server');
   let schema = {};
 
-  schema = buildFederatedSchema([{ typeDefs, resolvers }]);
+  schema = buildSubgraphSchema([{ typeDefs, resolvers }]);
 
   SchemaDirectiveVisitor.visitSchemaDirectives(schema, directives);
 

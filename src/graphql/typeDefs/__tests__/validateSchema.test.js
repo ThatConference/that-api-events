@@ -2,7 +2,7 @@
 /* this test is more about successfully building the schema then the
  * resulting schema from the build.
  */
-import { buildFederatedSchema } from '@apollo/federation';
+import { buildSubgraphSchema } from '@apollo/subgraph';
 import typeDefs from '../../typeDefs';
 let resolvers;
 let originalEnv;
@@ -30,7 +30,7 @@ describe('validate schema test', () => {
   // const directives = require('../../directives').default;
   // import directives from '../../directives';
 
-  let schema = buildFederatedSchema([{ typeDefs, resolvers }]);
+  let schema = buildSubgraphSchema([{ typeDefs, resolvers }]);
   // SchemaDirectiveVisitor.visitSchemaDirectives(schema, directives);
 
   describe('Validate graphql schema', () => {
