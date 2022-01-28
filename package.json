@@ -1,6 +1,6 @@
 {
   "name": "that-api-events",
-  "version": "2.12.1",
+  "version": "2.13.0",
   "description": "THATConference.com events service",
   "main": "index.js",
   "engines": {
@@ -40,7 +40,7 @@
     "graphql-scalars": "^1.14.1",
     "graphql-type-json": "^0.3.2",
     "lodash": "^4.17.21",
-    "node-fetch": "^2.6.6",
+    "node-fetch": "^2.6.7",
     "postmark": "^2.8.1",
     "response-time": "^2.3.2",
     "slugify": "^1.6.5",

@@ -9,30 +9,34 @@ union Product =
   | Training
   | Family
 
-extend type Ticket @key(fields: "id") {
+extend interface ProductBase @key(fields: "id") {
   id: ID! @external
 }
 
-extend type Membership @key(fields: "id") {
+extend type Ticket implements ProductBase @key(fields: "id") {
   id: ID! @external
 }
 
-extend type Partnership @key(fields: "id") {
+extend type Membership implements ProductBase @key(fields: "id") {
   id: ID! @external
 }
 
-extend type Food @key(fields: "id") {
+extend type Partnership implements ProductBase @key(fields: "id") {
   id: ID! @external
 }
 
-extend type Coupon @key(fields: "id") {
+extend type Food implements ProductBase @key(fields: "id") {
   id: ID! @external
 }
 
-extend type Training @key(fields: "id") {
+extend type Coupon implements ProductBase @key(fields: "id") {
   id: ID! @external
 }
 
-extend type Family @key(fields: "id") {
+extend type Training implements ProductBase @key(fields: "id") {
+  id: ID! @external
+}
+
+extend type Family implements ProductBase @key(fields: "id") {
   id: ID! @external
 }
