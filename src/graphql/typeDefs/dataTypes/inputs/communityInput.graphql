@@ -22,6 +22,9 @@ input CommunityCreateInput {
 
   "Community tags, subjects about them"
   tags: [String]!
+
+  "Links community wishes to display on their page, with their account"
+  links: [CommunityLinkCreateInput]!
 }
 
 input CommunityUpdateInput {
@@ -42,4 +45,7 @@ input CommunityUpdateInput {
 
   "Community tags, subjects about them"
   tags: [String]
+
+  "Links community wishes to display on their page, with their account"
+  links: [CommunityLinkUpdateInput]!
 }

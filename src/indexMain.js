@@ -94,7 +94,7 @@ function createUserContext(req, res, next) {
   }
 
   req.userContext = {
-    lcoale: req.headers.lcoale,
+    locale: req.headers.locale,
     authToken: req.headers.authorization,
     correlationId,
     site,

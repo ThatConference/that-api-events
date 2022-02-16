@@ -63,6 +63,7 @@ export const fieldResolvers = {
         id: lastUpdatedBy,
       };
     },
+    links: ({ links }) => links ?? [],
     events: ({ slug }, { filter }, { dataSources: { firestore } }) => {
       dlog('Community.events called with filter %s', filter);
 
