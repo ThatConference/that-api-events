@@ -40,6 +40,8 @@ type Community @key(fields: "id") {
   "Community tags, subjects about them"
   tags: [String]!
 
+  links: [CommunityLink]!
+
   "Any community sessions. Defaults: status: [APPROVED], filter: UPCOMING, pageSize: 20 (max: 100). orderBy only valid with filter: ALL (and defaults desc). DOES NOT RETURN SESSIONS WITHOUT STARTTIME FIELD"
   sessions(
     status: [SessionStatus]

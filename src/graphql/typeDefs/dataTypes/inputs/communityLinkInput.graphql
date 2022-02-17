@@ -1,0 +1,9 @@
+input CommunityLinkCreateInput {
+  linkType: LinkType!
+  url: URL!
+}
+
+input CommunityLinkUpdateInput {
+  linkType: LinkType!
+  url: URL!
+}

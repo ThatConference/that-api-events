@@ -1,0 +1,4 @@
+type CommunityLink {
+  linkType: LinkType!
+  url: URL
+}

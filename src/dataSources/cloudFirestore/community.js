@@ -20,6 +20,11 @@ function scrubCommunity({ community, user, isNew }) {
   scrubbedCommunity.lastUpdatedBy = user.sub;
   if (scrubbedCommunity.logo && scrubbedCommunity.logo.href)
     scrubbedCommunity.logo = scrubbedCommunity.logo.href;
+  if (scrubbedCommunity.links)
+    scrubbedCommunity.links = scrubbedCommunity.links.map(l => ({
+      linkType: l.linkType,
+      url: l.url.href,
+    }));
 
   return scrubbedCommunity;
 }
