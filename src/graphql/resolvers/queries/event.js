@@ -173,6 +173,10 @@ export const fieldResolvers = {
       dlog('event speakers resolver called');
       return sessionStore(firestore).findAllSpeakersForEvent({ eventId });
     },
+    featuredSessions: ({ featuredSessions }) =>
+      featuredSessions?.length ? featuredSessions.map(f => ({ id: f })) : [],
+    featuredSpeakers: ({ featuredSpeakers }) =>
+      featuredSpeakers?.length ? featuredSpeakers.map(f => ({ id: f })) : [],
     admin: ({ id: eventId }) => ({ eventId }),
   },
 };

@@ -153,6 +153,12 @@ type Event @key(fields: "id") {
   "counselors/speakers with sessions in this event"
   speakers: [PublicProfile]
 
+  "Explicit list of sessions to feature for event"
+  featuredSessions: [AcceptedSession]!
+
+  "Explicit list of speakers to feature for event"
+  featuredSpeakers: [PublicProfile]!
+
   "admin event queries for this event"
   admin: EventAdminQuery
 }

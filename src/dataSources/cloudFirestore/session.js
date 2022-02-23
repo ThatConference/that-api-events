@@ -193,7 +193,7 @@ const session = dbInstance => {
     pageSize = 20,
     cursor,
   }) {
-    dlog('findByCommunityWithStatuses %s, %o', eventId, statuses);
+    dlog('findByEventIdWithStatuses %s, %o', eventId, statuses);
     const inStatus = validateStatuses(statuses);
     const maxPageSize = 255;
     if (pageSize > maxPageSize)
