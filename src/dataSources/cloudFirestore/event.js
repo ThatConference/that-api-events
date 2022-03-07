@@ -195,9 +195,26 @@ const event = dbInstance => {
     });
   };
 
+  const findFutureByCommunitySlug = async slug => {
+    const slimslug = slug.trim().toLowerCase();
+    dlog('findFutureByCommunitySlug %s', slimslug);
+    const { docs } = await eventsCol
+      .where('community', '==', slimslug)
+      .where('startDate', '>', new Date())
+      .get();
+
+    return docs.map(e => {
+      const r = {
+        id: e.id,
+        ...e.data(),
+      };
+      return eventDateForge(r);
+    });
+  };
+
   const findPastByCommunitySlug = async slug => {
     const slimslug = slug.trim().toLowerCase();
-    dlog('findAllByCommunitySlug %s', slimslug);
+    dlog('findPastByCommunitySlug %s', slimslug);
     const { docs } = await eventsCol
       .where('community', '==', slimslug)
       .where('endDate', '<', new Date())
@@ -311,6 +328,7 @@ const event = dbInstance => {
     findActiveByCommunitySlug,
     findFeaturedByCommunitySlug,
     findAllByCommunitySlug,
+    findFutureByCommunitySlug,
     findPastByCommunitySlug,
     getCountByCommunitySlug,
     findIdFromSlug,

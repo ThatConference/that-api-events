@@ -2,12 +2,12 @@
 enum CommunityEventsFilter {
   "Everything"
   ALL
-  "Active events only, have isActive bit true"
+  "Active events only, have isActive bit true, endDate > Now"
   ACTIVE
-  "Featured events, by definition are also active"
+  "Featured events, isFeatured bit, by definition are also active"
   FEATURED
-  "Events happening in the future, greater than Now"
+  "Events happening in the future, start time greater than Now"
   FUTURE
-  "Events which have already happened, end date less than Now"
+  "Events which have already happened, endDate < Now"
   PAST
 }

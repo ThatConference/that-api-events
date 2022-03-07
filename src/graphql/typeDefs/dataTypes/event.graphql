@@ -160,5 +160,5 @@ type Event @key(fields: "id") {
   featuredSpeakers: [PublicProfile]!
 
   "admin event queries for this event"
-  admin: EventAdminQuery
+  admin: EventAdminQuery @auth(requires: "event:admin:orderAllocations")
 }

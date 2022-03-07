@@ -74,6 +74,8 @@ export const fieldResolvers = {
         eventResults = eventStore(firestore).findFeaturedByCommunitySlug(slug);
       } else if (filter === 'PAST') {
         eventResults = eventStore(firestore).findPastByCommunitySlug(slug);
+      } else if (filter === 'FUTURE') {
+        eventResults = eventStore(firestore).findFutureByCommunitySlug(slug);
       } else if (!filter || filter === 'ALL') {
         eventResults = eventStore(firestore).findAllByCommunitySlug(slug);
       } else {

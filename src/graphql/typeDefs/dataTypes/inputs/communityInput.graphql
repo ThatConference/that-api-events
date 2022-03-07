@@ -47,5 +47,5 @@ input CommunityUpdateInput {
   tags: [String]
 
   "Links community wishes to display on their page, with their account"
-  links: [CommunityLinkUpdateInput]!
+  links: [CommunityLinkUpdateInput]
 }
