@@ -1,0 +1,10 @@
+# duplicated here from Garage for federation
+"Enrollment status for Order Allocations"
+enum EnrollmentStatus {
+  "Product enrollment has not started"
+  NOT_STARTED
+  "Product enrollment is in progress"
+  IN_PROGRESS
+  "Product enrollment has been completed"
+  COMPLETE
+}

@@ -93,6 +93,53 @@ const order = dbInstance => {
       });
   }
 
+  // updates all orderAllocations on provided order
+  async function updateOrderAllocationsOnOrder({
+    orderId,
+    updateAllocation,
+    userId,
+  }) {
+    dlog('updateOrderAllocationsOnOrder called for order %s', orderId);
+
+    const { docs: orderAllocationDocs } = await allocationCollection
+      .where('order', '==', orderId)
+      .select()
+      .get();
+
+    if (orderAllocationDocs.length < 1) {
+      Sentry.withScope(scope => {
+        scope.setLevel(Sentry.Severity.Warning);
+        scope.setTag('function', 'updateOrderAlloationsOnOrder');
+        scope.setTag('scope', 'events > order');
+        scope.setTag(
+          'review',
+          'May be during marking speaker enrollment complete',
+        );
+        scope.setContext('No order allocations for order', {
+          orderId,
+          userId,
+        });
+        const msg = `No Order allocations returned when looking up orderId, ${orderId}, for member, ${userId}`;
+        Sentry.captureException(new Error(msg));
+      });
+
+      // For now return true until it is determined this leave things in a bad state
+      return true;
+    }
+
+    const scrubbedOa = scrubOrderAllocation({
+      orderAllocation: updateAllocation,
+      userId,
+    });
+    const batchWrite = dbInstance.batch();
+    orderAllocationDocs.forEach(d => {
+      const docRef = allocationCollection.doc(d.id);
+      batchWrite.update(docRef, scrubbedOa);
+    });
+
+    return batchWrite.commit().then(() => true);
+  }
+
   function isPinInUse({ partnerPin, eventId }) {
     dlog('is pin %s in use within event %s', partnerPin, eventId);
     return allocationCollection
@@ -132,6 +179,7 @@ const order = dbInstance => {
     findMeOrderAllocationsForEvent,
     findAllCompleteOrdersForEvent,
     updateOrderAllocation,
+    updateOrderAllocationsOnOrder,
     isPinInUse,
     findOrderByEventMemberType,
   };
