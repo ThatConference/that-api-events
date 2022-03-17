@@ -1,0 +1,4 @@
+type EventDestinationQuery @key(fields: "eventId") @key(fields: "name") {
+  eventId: ID!
+  name: SessionLocationDestination!
+}

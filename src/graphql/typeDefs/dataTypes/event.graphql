@@ -161,4 +161,7 @@ type Event @key(fields: "id") {
 
   "admin event queries for this event"
   admin: EventAdminQuery @auth(requires: "event:admin:orderAllocations")
+
+  "information on Destinations used by an event"
+  destinations: EventDestinationsQuery
 }

@@ -1,0 +1,183 @@
+enum SessionLocationDestination {
+  # Start In-Person locations
+  "1"
+  RM_1
+  "2"
+  RM_2
+  "3"
+  RM_3
+  "4"
+  RM_4
+  "5"
+  RM_5
+  "6"
+  RM_6
+  "7"
+  RM_7
+  "8"
+  RM_8
+  "9"
+  RM_9
+  "10"
+  RM_10
+  "A"
+  A
+  "B"
+  B
+  "C"
+  C
+  "D"
+  D
+  "E"
+  E
+  "F"
+  F
+  "G"
+  G
+  "H"
+  H
+  "Acacia"
+  ACACIA
+  "African 10"
+  AFRICAN_10
+  "African 20"
+  AFRICAN_20
+  "African 30"
+  AFRICAN_30
+  "African 40"
+  AFRICAN_40
+  "African 50"
+  AFRICAN_50
+  "African 60"
+  AFRICAN_60
+  "African 70"
+  AFRICAN_70
+  "African 80"
+  AFRICAN_80
+  "African 90"
+  AFRICAN_90
+  "African Ballroom Foyer"
+  AFRICAN_BALLROOM_FOYER
+  "African East"
+  AFRICAN_EAST
+  "African West"
+  AFRICAN_WEST
+  "Aloeswood"
+  ALOESWOOD
+  "Aralia"
+  ARALIA
+  "Atrium"
+  ATRIUM
+  "Bamboo"
+  BAMBOO
+  "Banyan"
+  BANYAN
+  "Barranco Lounge"
+  BARRANCO_LOUNGE
+  "Conference Center"
+  CONFERENCE_CENTER
+  "Crown Palm"
+  CROWN_PALM
+  "Cypress"
+  CYPRESS
+  "Guava"
+  GUAVA
+  "Indoor Waterpark"
+  INDOOR_WATERPARK
+  "Iron Wood"
+  IRON_WOOD
+  "Kalahari Ballroom"
+  KALAHARI_BALLROOM
+  "Kalahari Drive, South Side of Double Cut"
+  KALAHARI_DRIVE_SOUTH_SIDE_OF_DOUBLE_CUT
+  "Kilimanjaro Ballroom"
+  KILIMANJARO_BALLROOM
+  "Maji Lounge"
+  MAJI_LOUNGE
+  "Mangrove"
+  MANGROVE
+  "Marula"
+  MARULA
+  "Mess Hall"
+  MESS_HALL
+  "Nile"
+  NILE
+  "North Atrium"
+  NORTH_ATRIUM
+  "North Atrium / Registration"
+  NORTH_ATRIUM_REGISTRATION
+  "Open Spaces"
+  OPEN_SPACES
+  "Open Spaces Area"
+  OPEN_SPACES_AREA
+  "Open Spaces Room"
+  OPEN_SPACES_ROOM
+  "Outdoor Patio"
+  OUTDOOR_PATIO
+  "Portia"
+  PORTIA
+  "Registration"
+  REGISTRATION
+  "Salon A"
+  SALON_A
+  "Salon B"
+  SALON_B
+  "Salon C"
+  SALON_C
+  "Salon D"
+  SALON_D
+  "Salon E"
+  SALON_E
+  "Salon F"
+  SALON_F
+  "Salon G"
+  SALON_G
+  "Salon H"
+  SALON_H
+  "Salon I"
+  SALON_I
+  "Tamarind"
+  TAMARIND
+  "Tamboti"
+  TAMBOTI
+  "TBD"
+  TBD
+  "THAT Trail"
+  THAT_TRAIL
+  "Wisteria"
+  WISTERIA
+  "Zambezi"
+  ZAMBEZI
+
+  # Start combined room destinations
+  "3 & 6"
+  RM_3_6
+  "4 & 5"
+  RM_4_5
+  "A & H"
+  A_H
+  "B & G"
+  B_G
+  "C – F"
+  C_D_E_F
+  "Aralia_Marula"
+  ARALIA_MARULA
+  "African 50 & African 60"
+  AFRICAN_50_AFRICAN_60
+  "African 70 & African 80"
+  AFRICAN_70_AFRICAN_80
+
+  # Start on-the-line destinations
+  "https://that.live"
+  THAT_LIVE
+  "https://that.us"
+  THAT
+  "Twitch"
+  TWITCH
+  "YouTube"
+  YOUTUBE
+  "Facebook"
+  FACEBOOK
+  "Google Meet"
+  GOOGLE_MEET
+}

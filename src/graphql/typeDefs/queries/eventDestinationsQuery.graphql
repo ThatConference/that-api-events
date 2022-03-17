@@ -1,0 +1,3 @@
+type EventDestinationsQuery {
+  destination(name: SessionLocationDestination!): EventDestinationQuery
+}
