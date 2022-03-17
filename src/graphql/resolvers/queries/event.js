@@ -178,5 +178,6 @@ export const fieldResolvers = {
     featuredSpeakers: ({ featuredSpeakers }) =>
       featuredSpeakers?.length ? featuredSpeakers.map(f => ({ id: f })) : [],
     admin: ({ id: eventId }) => ({ eventId }),
+    destinations: ({ id: eventId }) => ({ eventId }),
   },
 };
