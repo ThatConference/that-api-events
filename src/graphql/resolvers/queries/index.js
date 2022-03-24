@@ -19,6 +19,8 @@ import { fieldResolvers as eventAdminFields } from './eventAdmin';
 import { fieldResolvers as acceptedSpeakerFields } from './acceptedSpeaker';
 import { fieldResolvers as eventDestinationsFields } from './eventDestinations';
 import { fieldResolvers as eventDestinationFields } from './eventDestination';
+import { fieldResolvers as partnerFields } from './partner';
+import { fieldResolvers as partnerSponsoredEventFields } from './partnerSponsorEvents';
 
 export default {
   ...root,
@@ -45,4 +47,6 @@ export const fieldResolvers = {
   ...acceptedSpeakerFields,
   ...eventDestinationsFields,
   ...eventDestinationFields,
+  ...partnerFields,
+  ...partnerSponsoredEventFields,
 };

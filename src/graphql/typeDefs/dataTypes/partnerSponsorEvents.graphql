@@ -1,0 +1,8 @@
+type PartnerSponsorEvents {
+  "Future and current events sponsored by Partner"
+  future: [Event]!
+  "Past events sponsored by Partner"
+  past: [Event]!
+  "All events sponsored by Partner"
+  all: [Event]!
+}

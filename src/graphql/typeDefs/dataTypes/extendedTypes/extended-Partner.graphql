@@ -1,11 +1,19 @@
 extend type Partner @key(fields: "id") {
   id: ID! @external
 
+  # "Events partner has sponsored in the past (now > endDate"
+  # pastEvents: [Event]!
+  # "Events partner is sponsoring now or in the future (now >= startDate)"
+  # futureEvents: [Event]!
+  "Partner's sponsored events"
+  sponsoredEvents: PartnerSponsorEvents!
+
+  # The following fields are only valid when queried through an event
+  "Valid when access through event query defining the placement level of the partner"
   placement: Int!
+  "sponsorship level. Access through Event query ONLY!"
+  level: PartnershipLevel!
 
   "physical location of a partners booth. Access through Event query ONLY!"
   location: String
-
-  "sponsorship level. Access through Event query ONLY!"
-  level: PartnershipLevel!
 }
