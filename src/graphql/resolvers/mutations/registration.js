@@ -1,8 +1,8 @@
 import debug from 'debug';
-import { constants } from '@thatconference/api';
 import { RegistrationError } from '../../../lib/errors';
 import orderStore from '../../../dataSources/cloudFirestore/order';
 import eventStore from '../../../dataSources/cloudFirestore/event';
+import constants from '../../../constants';
 
 const dlog = debug('that:api:events:mutations:registration');
 
@@ -97,7 +97,7 @@ export const fieldResolvers = {
           userId: user.sub,
         })
         .then(() => {
-          userEvents.emit('registrationCheckIn', {
+          userEvents.emit(constants.THAT.USER_EVENTS.REGISTRATION_CHECKIN, {
             firestore,
             memberId: allocation.allocatedTo || null,
             partnerPin,

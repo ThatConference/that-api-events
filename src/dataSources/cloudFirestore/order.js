@@ -123,8 +123,7 @@ const order = dbInstance => {
         Sentry.captureException(new Error(msg));
       });
 
-      // For now return true until it is determined this leave things in a bad state
-      return true;
+      return false;
     }
 
     const scrubbedOa = scrubOrderAllocation({
