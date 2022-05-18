@@ -1,6 +1,6 @@
 {
   "name": "that-api-events",
-  "version": "2.21.0",
+  "version": "2.21.1",
   "description": "THATConference.com events service",
   "main": "index.js",
   "engines": {
