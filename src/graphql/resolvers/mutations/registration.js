@@ -47,7 +47,7 @@ export const fieldResolvers = {
         throw new RegistrationError(
           `OrderAllocation ${allocationId} not for current event ${eventId}`,
         );
-      const eventSlug = _eventSlug ?? '';
+      const eventSlug = _eventSlug?.slug ?? '';
 
       const result = {
         result: false,
