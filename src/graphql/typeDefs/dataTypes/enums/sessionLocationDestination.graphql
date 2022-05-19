@@ -74,6 +74,26 @@ enum SessionLocationDestination {
   BANYAN
   "Barranco Lounge"
   BARRANCO_LOUNGE
+  "Campsite 1"
+  CAMPSITE_1
+  "Campsite 2"
+  CAMPSITE_2
+  "Campsite 3"
+  CAMPSITE_3
+  "Campsite 4"
+  CAMPSITE_4
+  "Campsite 5"
+  CAMPSITE_5
+  "Campsite 6"
+  CAMPSITE_6
+  "Campsite 7"
+  CAMPSITE_7
+  "Campsite 8"
+  CAMPSITE_8
+  "Campsite 9"
+  CAMPSITE_9
+  "Campsite 10"
+  CAMPSITE_10
   "Conference Center"
   CONFERENCE_CENTER
   "Crown Palm"
@@ -112,6 +132,10 @@ enum SessionLocationDestination {
   OPEN_SPACES_AREA
   "Open Spaces Room"
   OPEN_SPACES_ROOM
+  "Outdoor Amatuli Village"
+  OUTDOOR_AMATULI_VILLAGE
+  "Outdoor Event Barn"
+  OUTDOOR_EVENT_BARN
   "Outdoor Patio"
   OUTDOOR_PATIO
   "Portia"
@@ -148,26 +172,6 @@ enum SessionLocationDestination {
   WISTERIA
   "Zambezi"
   ZAMBEZI
-  "Campsite 1"
-  CAMPSITE_1
-  "Campsite 2"
-  CAMPSITE_2
-  "Campsite 3"
-  CAMPSITE_3
-  "Campsite 4"
-  CAMPSITE_4
-  "Campsite 5"
-  CAMPSITE_5
-  "Campsite 6"
-  CAMPSITE_6
-  "Campsite 7"
-  CAMPSITE_7
-  "Campsite 8"
-  CAMPSITE_8
-  "Campsite 9"
-  CAMPSITE_9
-  "Campsite 10"
-  CAMPSITE_10
 
   # Start combined room destinations
   "3 & 6"
