@@ -140,6 +140,8 @@ enum SessionLocationDestination {
   OUTDOOR_PATIO
   "Portia"
   PORTIA
+  "Ranger Station"
+  RANGER_STATION
   "Registration"
   REGISTRATION
   "Salon A"
