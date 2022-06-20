@@ -69,6 +69,7 @@ const order = dbInstance => {
     return orderCollection
       .where('event', '==', eventId)
       .where('status', '==', 'COMPLETE')
+      .select()
       .get()
       .then(querySnapshot => querySnapshot.docs.map(o => ({ id: o.id })));
   }
