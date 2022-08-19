@@ -1,6 +1,6 @@
 import { isNil } from 'lodash';
-import { ApolloServer, SchemaDirectiveVisitor } from 'apollo-server-express';
-import { buildFederatedSchema } from '@apollo/federation';
+import { ApolloServer } from 'apollo-server-express';
+import { buildSubgraphSchema } from '@apollo/subgraph';
 import debug from 'debug';
 import { security } from '@thatconference/api';
 import DataLoader from 'dataloader';
@@ -29,9 +29,19 @@ const createServer = ({ dataSources }) => {
   dlog('creating apollo server');
   let schema = {};
 
-  schema = buildFederatedSchema([{ typeDefs, resolvers }]);
+  dlog('build subgraph schema');
+  schema = buildSubgraphSchema([{ typeDefs, resolvers }]);
 
-  SchemaDirectiveVisitor.visitSchemaDirectives(schema, directives);
+  const directiveTransformers = [
+    directives.auth('auth').authDirectiveTransformer,
+    directives.lowerCase('lowerCase').lowerCaseDirectiveTransformer,
+  ];
+
+  dlog('directiveTransformers: %O', directiveTransformers);
+  schema = directiveTransformers.reduce(
+    (curSchema, transformer) => transformer(curSchema),
+    schema,
+  );
 
   return new ApolloServer({
     schema,
