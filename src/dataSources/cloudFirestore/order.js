@@ -109,7 +109,7 @@ const order = dbInstance => {
 
     if (orderAllocationDocs.length < 1) {
       Sentry.withScope(scope => {
-        scope.setLevel(Sentry.Severity.Warning);
+        scope.setLevel('warning');
         scope.setTag('function', 'updateOrderAlloationsOnOrder');
         scope.setTag('scope', 'events > order');
         scope.setTag(

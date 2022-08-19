@@ -46,10 +46,6 @@ const createServer = ({ dataSources }) => {
   return new ApolloServer({
     schema,
     introspection: JSON.parse(process.env.ENABLE_GRAPH_INTROSPECTION || false),
-    playground: JSON.parse(process.env.ENABLE_GRAPH_PLAYGROUND)
-      ? { endpoint: '/' }
-      : false,
-    tracing: false,
     dataSources: () => {
       dlog('creating dataSources');
       const { firestore } = dataSources;
@@ -102,7 +98,8 @@ const createServer = ({ dataSources }) => {
         communityLoader,
       };
     },
-
+    csrfPrevention: true,
+    cache: 'bounded',
     context: async ({ req, res }) => {
       dlog('building graphql user context');
       let context = {};
@@ -114,7 +111,7 @@ const createServer = ({ dataSources }) => {
         Sentry.addBreadcrumb({
           category: 'graphql context',
           message: 'user has authToken',
-          level: Sentry.Severity.Info,
+          level: 'info',
         });
 
         const validatedToken = await jwtClient.verify(
@@ -141,9 +138,7 @@ const createServer = ({ dataSources }) => {
 
       return context;
     },
-
     plugins: [],
-
     formatError: err => {
       dlog('formatError %O', err);
 
