@@ -4,29 +4,25 @@
  */
 import { buildSubgraphSchema } from '@apollo/subgraph';
 import typeDefs from '../../typeDefs';
-import resolvers from '../../resolvers';
 import directives from '../../directives';
 import { ApolloServer } from 'apollo-server-express';
 
 let originalEnv;
+let resolvers;
 
 describe('validate schema test', () => {
   beforeAll(() => {
     originalEnv = process.env;
+    process.env.POSTMARK_API_TOKEN = 'POSTMARK_API_TOKEN';
+    process.env.SLACK_WEBHOOK_URL = 'SLACK_WEBHOOK_URL';
+    resolvers = require('../../resolvers');
   });
 
   afterAll(() => {
     process.env = originalEnv;
   });
 
-  /* Checking directives is not working. Fails on auth:
-   * * ReferenceError: defaultFieldResolver is not defined
-   */
-  // const directives = require('../../directives').default;
-  // import directives from '../../directives';
-
   let schema = buildSubgraphSchema([{ typeDefs, resolvers }]);
-  // SchemaDirectiveVisitor.visitSchemaDirectives(schema, directives);
 
   describe('Validate graphql schema', () => {
     it('schema has successfully built and is and object', () => {
