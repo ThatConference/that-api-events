@@ -37,6 +37,7 @@ jobs:
       GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
       GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
       SLACK_WEBHOOK_DEV_NOTIFICATIONS: ${{ secrets.SLACK_WEBHOOK_DEV_NOTIFICATIONS }}
+      STELLATE_TOKEN: ${{ secrets.STELLATE_TOKEN }}
 
   notifications:
     name: Workflow notifications
