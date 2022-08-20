@@ -24,7 +24,7 @@ function userEvents(postmark) {
 
     if (!member?.email) {
       Sentry.withScope(scope => {
-        scope.setLevel(Sentry.Severity.Warning);
+        scope.setLevel('warning');
         scope.setTags({
           event: 'user',
           caller,

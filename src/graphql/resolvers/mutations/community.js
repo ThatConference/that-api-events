@@ -166,7 +166,7 @@ Starting at: ${dateformat(startTime, 'dddd, mmmm dS, yyyy "@" h:MM TT Z')}
             });
             Sentry.captureMessage(
               `non-200 result from socialBuffer library. status: ${pd.status}, ${pd.statusText}`,
-              Sentry.Severity.Warning,
+              'warning',
             );
           }
         });
