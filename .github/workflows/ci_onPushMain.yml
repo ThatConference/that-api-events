@@ -38,6 +38,8 @@ jobs:
       GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
       SLACK_WEBHOOK_DEV_NOTIFICATIONS: ${{ secrets.SLACK_WEBHOOK_DEV_NOTIFICATIONS }}
       STELLATE_TOKEN: ${{ secrets.STELLATE_TOKEN }}
+      STELLATE_SERVICE: ${{ secrets.STELLATE_SERVICE }}
+
 
   notifications:
     name: Workflow notifications
