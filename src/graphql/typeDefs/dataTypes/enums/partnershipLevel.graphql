@@ -1,12 +1,22 @@
 enum PartnershipLevel {
+  "Pioneer"
   PIONEER
+  "Explorer"
   EXPLORER
+  "Scout"
   SCOUT
+  "Cub"
   CUB
+  "Patron"
   PATRON
+  "Corporate Partner"
   CORPORATE_PARTNER
+  "Partner"
   PARTNER
+  "Media Partner"
   MEDIA
+  "Charity"
+  CHARITY
   PLATINUM @deprecated(reason: "no longer a partnership level offered.")
   GOLD @deprecated(reason: "no longer a partnership level offered.")
   SILVER @deprecated(reason: "no longer a partnership level offered.")
