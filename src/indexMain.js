@@ -37,6 +37,7 @@ Sentry.init({
   environment: process.env.THAT_ENVIRONMENT,
   release: process.env.SENTRY_VERSION || defaultVersion,
   debug: process.env.NODE_ENV === 'development',
+  normalizeDepth: 6,
 });
 
 Sentry.configureScope(scope => {
@@ -62,8 +63,8 @@ const graphServer = apolloGraphServer(createConfig());
 
 function sentryMark(req, res, next) {
   Sentry.addBreadcrumb({
-    category: 'root',
-    message: 'init',
+    category: 'that-api-events',
+    message: 'events init',
     level: 'info',
   });
   next();

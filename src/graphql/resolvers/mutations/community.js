@@ -88,7 +88,9 @@ export const fieldResolvers = {
       dlog('queueUpSocials called with socials: %o', socials);
       const socialsBuffer = lib.socialsBuffer.socialsBuffer();
       const socialsEnum = lib.socialsBuffer.socials;
-      Sentry.setContext('socials passed in', { socials: socials.join() });
+      Sentry.configureScope(scope =>
+        scope.setContext('socials passed in', { socials: socials.join() }),
+      );
 
       // validate socials are valid in library
       const socialsArray = socials.map(s => socialsEnum[s]);
@@ -156,10 +158,9 @@ Starting at: ${dateformat(startTime, 'dddd, mmmm dS, yyyy "@" h:MM TT Z')}
         // each returned Promise
         rr.forEach(pd => {
           if (!pd.isOk) {
-            Sentry.setContext(
-              'failed socialsBuffer request',
-              JSON.stringify(pd.data),
-            );
+            Sentry.setContext('failed socialsBuffer request', {
+              data: pd.data,
+            });
             Sentry.setContext('status', {
               status: pd.status,
               statusText: pd.statusText,
