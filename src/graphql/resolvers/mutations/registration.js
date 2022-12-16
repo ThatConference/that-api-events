@@ -169,10 +169,15 @@ export const fieldResolvers = {
         allocationId,
         partnerPin,
       );
-      const funcs = [
-        orderStore(firestore).getOrderAllocation(allocationId),
-        orderStore(firestore).isPinInUse({ eventId, partnerPin }),
-      ];
+
+      // eslint-disable-next-line no-param-reassign
+      if (partnerPin === '') partnerPin = null;
+      const funcs = [orderStore(firestore).getOrderAllocation(allocationId)];
+      if (partnerPin) {
+        funcs.push(orderStore(firestore).isPinInUse({ eventId, partnerPin }));
+      } else {
+        funcs.push(false);
+      }
 
       const [allocation, isPinInUse] = await Promise.all(funcs);
 
