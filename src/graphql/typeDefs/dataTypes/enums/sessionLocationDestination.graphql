@@ -68,6 +68,8 @@ enum SessionLocationDestination {
   ARALIA
   "Atrium"
   ATRIUM
+  "Baobobs Social"
+  BAOBOBS_SOCIAL
   "Bamboo"
   BAMBOO
   "Banyan"
