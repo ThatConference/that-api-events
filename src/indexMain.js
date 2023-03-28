@@ -1,13 +1,16 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable no-console */
 import express from 'express';
+import http from 'node:http';
+import { json } from 'body-parser';
+import { expressMiddleware } from '@apollo/server/express4';
+import cors from 'cors';
 import debug from 'debug';
 import { Firestore } from '@google-cloud/firestore';
 import { Client as Postmark } from 'postmark';
 import responseTime from 'response-time';
 import { v4 as uuidv4 } from 'uuid';
 import * as Sentry from '@sentry/node';
-
 import apolloGraphServer from './graphql';
 import envConfig from './envConfig';
 import userEventEmitter from './events/user';
@@ -29,6 +32,7 @@ const firestore = new Firestore();
 const postmark = new Postmark(envConfig.postmarkApiToken);
 const userEvents = userEventEmitter(postmark);
 const api = express();
+const port = process.env.PORT || 8001;
 
 dlog('function instance created');
 
@@ -44,6 +48,8 @@ Sentry.configureScope(scope => {
   scope.setTag('thatApp', 'that-api-events');
 });
 
+const httpServer = http.createServer(api);
+
 const createConfig = () => {
   dlog('createConfig');
 
@@ -56,10 +62,11 @@ const createConfig = () => {
         userEvents,
       },
     },
+    httpServer,
   };
 };
 
-const graphServer = apolloGraphServer(createConfig());
+const graphServerParts = apolloGraphServer(createConfig());
 
 function sentryMark(req, res, next) {
   Sentry.addBreadcrumb({
@@ -111,18 +118,35 @@ function failure(err, req, res, next) {
   res.set('Content-Type', 'application/json').status(500).json(err);
 }
 
-api.use(responseTime()).use(sentryMark).use(createUserContext).use(failure);
+api.use(
+  Sentry.Handlers.requestHandler(),
+  cors(),
+  responseTime(),
+  json(),
+  sentryMark,
+  createUserContext,
+);
 
-const port = process.env.PORT || 8001;
-graphServer
+// .use(responseTime()).use(sentryMark).use(createUserContext).use(failure);
+
+const { graphQlServer, createContext } = graphServerParts;
+
+graphQlServer
   .start()
   .then(() => {
-    graphServer.applyMiddleware({ app: api, path: '/' });
-    api.listen({ port }, () =>
-      console.log(`Events 🕰 is running 🏃‍♂️ on port 🚢 ${port}`),
+    api.use(
+      expressMiddleware(graphQlServer, {
+        context: async ({ req }) => createContext({ req }),
+      }),
     );
   })
   .catch(err => {
     console.log(`graphServer.start() error 💥: ${err.message}`);
     throw err;
   });
+
+api.use(Sentry.Handlers.errorHandler()).use(failure);
+
+api.listen({ port }, () =>
+  console.log(`⚡ Events 🕰 is running on 🚢 port ${port}`),
+);
