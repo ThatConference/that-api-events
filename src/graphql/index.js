@@ -1,7 +1,7 @@
 import { isNil } from 'lodash';
 import { ApolloServer } from '@apollo/server';
-import { buildSubgraphSchema } from '@apollo/subgraph';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
+import { buildSubgraphSchema } from '@apollo/subgraph';
 import debug from 'debug';
 import { security } from '@thatconference/api';
 import DataLoader from 'dataloader';

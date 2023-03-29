@@ -74,10 +74,13 @@ function sentryMark(req, res, next) {
     message: 'events init',
     level: 'info',
   });
+
   next();
 }
 
 function createUserContext(req, res, next) {
+  dlog('creating user context');
+
   const correlationId =
     req.headers['that-correlation-id'] &&
     req.headers['that-correlation-id'] !== 'undefined'
@@ -86,6 +89,9 @@ function createUserContext(req, res, next) {
 
   Sentry.configureScope(scope => {
     scope.setTag('correlationId', correlationId);
+    scope.setContext('headers', {
+      headers: req.headers,
+    });
   });
 
   let site;
@@ -100,6 +106,10 @@ function createUserContext(req, res, next) {
   } else {
     site = 'www.thatconference.com';
   }
+
+  Sentry.configureScope(scope => {
+    scope.setTag('site', site);
+  });
 
   req.userContext = {
     locale: req.headers.locale,
