@@ -57,8 +57,7 @@ const createServerParts = ({ dataSources, httpServer }) => {
               scope.setLevel('error');
               scope.setContext(
                 `Assigned Event's don't exist in events Collection`,
-                { ids },
-                { events },
+                { ids, events },
               );
               Sentry.captureMessage(
                 `Assigned Event's don't exist in events Collection`,
@@ -77,8 +76,7 @@ const createServerParts = ({ dataSources, httpServer }) => {
               scope.setLevel('error');
               scope.setContext(
                 `Assigned Community's don't exist in communities Collection`,
-                { ids },
-                { communities },
+                { ids, communities },
               );
               Sentry.captureMessage(
                 `Assigned Community's don't exist in communities Collection`,

@@ -11,6 +11,7 @@ import { Client as Postmark } from 'postmark';
 import responseTime from 'response-time';
 import { v4 as uuidv4 } from 'uuid';
 import * as Sentry from '@sentry/node';
+
 import apolloGraphServer from './graphql';
 import envConfig from './envConfig';
 import userEventEmitter from './events/user';
@@ -117,6 +118,8 @@ function createUserContext(req, res, next) {
     correlationId,
     site,
   };
+  dlog('headers %o', req.headers);
+  dlog('userContext %o', req.userContext);
 
   next();
 }
@@ -136,8 +139,6 @@ api.use(
   sentryMark,
   createUserContext,
 );
-
-// .use(responseTime()).use(sentryMark).use(createUserContext).use(failure);
 
 const { graphQlServer, createContext } = graphServerParts;
 
