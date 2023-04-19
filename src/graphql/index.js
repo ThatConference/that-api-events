@@ -44,50 +44,6 @@ const createServerParts = ({ dataSources, httpServer }) => {
     schema,
   );
 
-  dlog('🚜 assembling datasources');
-  const { firestore } = dataSources;
-  const amendedDataSources = {
-    ...dataSources,
-    eventLoader: new DataLoader(ids =>
-      eventStore(firestore)
-        .getBatch(ids)
-        .then(events => {
-          if (events.includes(null)) {
-            Sentry.withScope(scope => {
-              scope.setLevel('error');
-              scope.setContext(
-                `Assigned Event's don't exist in events Collection`,
-                { ids, events },
-              );
-              Sentry.captureMessage(
-                `Assigned Event's don't exist in events Collection`,
-              );
-            });
-          }
-          return ids.map(id => events.find(e => e && e.id === id));
-        }),
-    ),
-    communityLoader: new DataLoader(ids =>
-      communityStore(firestore)
-        .getBatch(ids)
-        .then(communities => {
-          if (communities.includes(null)) {
-            Sentry.withScope(scope => {
-              scope.setLevel('error');
-              scope.setContext(
-                `Assigned Community's don't exist in communities Collection`,
-                { ids, communities },
-              );
-              Sentry.captureMessage(
-                `Assigned Community's don't exist in communities Collection`,
-              );
-            });
-          }
-          return ids.map(id => communities.find(e => e && e.id === id));
-        }),
-    ),
-  };
-
   dlog('🚜 creating new apollo server instance');
   const graphQlServer = new ApolloServer({
     schema,
@@ -114,9 +70,49 @@ const createServerParts = ({ dataSources, httpServer }) => {
   dlog('🚜 creating createContext function');
   const createContext = async ({ req, res }) => {
     dlog('🚜 building graphql user context');
+    dlog('🚜 assembling datasources');
+    const { firestore } = dataSources;
     let context = {
       dataSources: {
-        ...amendedDataSources,
+        ...dataSources,
+        eventLoader: new DataLoader(ids =>
+          eventStore(firestore)
+            .getBatch(ids)
+            .then(events => {
+              if (events.includes(null)) {
+                Sentry.withScope(scope => {
+                  scope.setLevel('error');
+                  scope.setContext(
+                    `Assigned Event's don't exist in events Collection`,
+                    { ids, events },
+                  );
+                  Sentry.captureMessage(
+                    `Assigned Event's don't exist in events Collection`,
+                  );
+                });
+              }
+              return ids.map(id => events.find(e => e && e.id === id));
+            }),
+        ),
+        communityLoader: new DataLoader(ids =>
+          communityStore(firestore)
+            .getBatch(ids)
+            .then(communities => {
+              if (communities.includes(null)) {
+                Sentry.withScope(scope => {
+                  scope.setLevel('error');
+                  scope.setContext(
+                    `Assigned Community's don't exist in communities Collection`,
+                    { ids, communities },
+                  );
+                  Sentry.captureMessage(
+                    `Assigned Community's don't exist in communities Collection`,
+                  );
+                });
+              }
+              return ids.map(id => communities.find(e => e && e.id === id));
+            }),
+        ),
       },
     };
 
