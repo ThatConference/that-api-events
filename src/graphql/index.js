@@ -1,5 +1,6 @@
 import { isNil } from 'lodash';
-import { ApolloServer } from 'apollo-server-express';
+import { ApolloServer } from '@apollo/server';
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import { buildSubgraphSchema } from '@apollo/subgraph';
 import debug from 'debug';
 import { security } from '@thatconference/api';
@@ -17,19 +18,19 @@ const dlog = debug('that:api:events:graphServer');
 const jwtClient = security.jwt();
 
 /**
- * will create you a configured instance of an apollo gateway
- * @param {object} userContext - user context that w
- * @return {object} a configured instance of an apollo gateway.
+ * creates an Apollo server instance and the context
+ * Both are returned separately as the context is added to
+ * Expressjs directly
+ * @param {object} datasources - datasources to add to context
+ * @param {object} httpServer - required for Apollo connection drain
  *
- * @example
- *
- *     createGateway(userContext)
+ * @return {object}
  */
-const createServer = ({ dataSources }) => {
-  dlog('creating apollo server');
+const createServerParts = ({ dataSources, httpServer }) => {
+  dlog('🚜 creating apollo server and context');
   let schema = {};
 
-  dlog('build subgraph schema');
+  dlog('🚜 building subgraph schema');
   schema = buildSubgraphSchema([{ typeDefs, resolvers }]);
 
   const directiveTransformers = [
@@ -37,124 +38,121 @@ const createServer = ({ dataSources }) => {
     directives.lowerCase('lowerCase').lowerCaseDirectiveTransformer,
   ];
 
-  dlog('directiveTransformers: %O', directiveTransformers);
+  dlog('🚜 adding directiveTransformers: %O', directiveTransformers);
   schema = directiveTransformers.reduce(
     (curSchema, transformer) => transformer(curSchema),
     schema,
   );
 
-  return new ApolloServer({
+  dlog('🚜 creating new apollo server instance');
+  const graphQlServer = new ApolloServer({
     schema,
     introspection: JSON.parse(process.env.ENABLE_GRAPH_INTROSPECTION || false),
-    dataSources: () => {
-      dlog('creating dataSources');
-      const { firestore } = dataSources;
-
-      const eventLoader = new DataLoader(ids =>
-        eventStore(firestore)
-          .getBatch(ids)
-          .then(events => {
-            if (events.includes(null)) {
-              Sentry.withScope(scope => {
-                scope.setLevel('error');
-                scope.setContext(
-                  `Assigned Event's don't exist in events Collection`,
-                  { ids },
-                  { events },
-                );
-                Sentry.captureMessage(
-                  `Assigned Event's don't exist in events Collection`,
-                );
-              });
-            }
-            return ids.map(id => events.find(e => e && e.id === id));
-          }),
-      );
-
-      const communityLoader = new DataLoader(ids =>
-        communityStore(firestore)
-          .getBatch(ids)
-          .then(communities => {
-            if (communities.includes(null)) {
-              Sentry.withScope(scope => {
-                scope.setLevel('error');
-                scope.setContext(
-                  `Assigned Community's don't exist in communities Collection`,
-                  { ids },
-                  { communities },
-                );
-                Sentry.captureMessage(
-                  `Assigned Community's don't exist in communities Collection`,
-                );
-              });
-            }
-            return ids.map(id => communities.find(e => e && e.id === id));
-          }),
-      );
-
-      return {
-        ...dataSources,
-        eventLoader,
-        communityLoader,
-      };
-    },
     csrfPrevention: true,
     cache: 'bounded',
-    context: async ({ req, res }) => {
-      dlog('building graphql user context');
-      let context = {};
-
-      dlog('auth header %o', req.headers);
-      if (!isNil(req.headers.authorization)) {
-        dlog('validating token for %o:', req.headers.authorization);
-
-        Sentry.addBreadcrumb({
-          category: 'graphql context',
-          message: 'user has authToken',
-          level: 'info',
-        });
-
-        const validatedToken = await jwtClient.verify(
-          req.headers.authorization,
-        );
-
-        Sentry.configureScope(scope => {
-          scope.setUser({
-            id: validatedToken.sub,
-            permissions: validatedToken.permissions.toString(),
-          });
-        });
-
-        dlog('validated token: %o', validatedToken);
-        context = {
-          ...context,
-          user: {
-            ...validatedToken,
-            site: req.userContext.site,
-            correlationId: req.userContext.correlationId,
-          },
-        };
-      }
-
-      return context;
-    },
-    plugins: [],
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
     formatError: err => {
       dlog('formatError %O', err);
 
       Sentry.withScope(scope => {
         scope.setTag('formatError', true);
         scope.setLevel('warning');
-
-        scope.setExtra('originalError', err.originalError);
-        scope.setExtra('path', err.path);
-
+        scope.setContext('originalError', { originalError: err.originalError });
+        scope.setContext('path', { path: err.path });
+        scope.setContext('error object', { error: err });
         Sentry.captureException(err);
       });
 
       return err;
     },
   });
+
+  dlog('🚜 creating createContext function');
+  const createContext = async ({ req, res }) => {
+    dlog('🚜 building graphql user context');
+    dlog('🚜 assembling datasources');
+    const { firestore } = dataSources;
+    let context = {
+      dataSources: {
+        ...dataSources,
+        eventLoader: new DataLoader(ids =>
+          eventStore(firestore)
+            .getBatch(ids)
+            .then(events => {
+              if (events.includes(null)) {
+                Sentry.withScope(scope => {
+                  scope.setLevel('error');
+                  scope.setContext(
+                    `Assigned Event's don't exist in events Collection`,
+                    { ids, events },
+                  );
+                  Sentry.captureMessage(
+                    `Assigned Event's don't exist in events Collection`,
+                  );
+                });
+              }
+              return ids.map(id => events.find(e => e && e.id === id));
+            }),
+        ),
+        communityLoader: new DataLoader(ids =>
+          communityStore(firestore)
+            .getBatch(ids)
+            .then(communities => {
+              if (communities.includes(null)) {
+                Sentry.withScope(scope => {
+                  scope.setLevel('error');
+                  scope.setContext(
+                    `Assigned Community's don't exist in communities Collection`,
+                    { ids, communities },
+                  );
+                  Sentry.captureMessage(
+                    `Assigned Community's don't exist in communities Collection`,
+                  );
+                });
+              }
+              return ids.map(id => communities.find(e => e && e.id === id));
+            }),
+        ),
+      },
+    };
+
+    dlog('🚜 auth header %o', req.headers);
+    if (!isNil(req.headers.authorization)) {
+      dlog('🚜 validating token for %o:', req.headers.authorization);
+
+      Sentry.addBreadcrumb({
+        category: 'graphql context',
+        message: 'user has authToken',
+        level: 'info',
+      });
+
+      const validatedToken = await jwtClient.verify(req.headers.authorization);
+
+      Sentry.configureScope(scope => {
+        scope.setUser({
+          id: validatedToken.sub,
+          permissions: validatedToken.permissions.toString(),
+        });
+      });
+
+      dlog('🚜 validated token: %o', validatedToken);
+      context = {
+        ...context,
+        user: {
+          ...validatedToken,
+          site: req.userContext.site,
+          correlationId: req.userContext.correlationId,
+        },
+      };
+    }
+
+    return context;
+  };
+
+  return {
+    graphQlServer,
+    createContext,
+  };
 };
 
-export default createServer;
+export default createServerParts;
