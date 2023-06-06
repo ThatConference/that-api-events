@@ -1,6 +1,9 @@
 import debug from 'debug';
 import { sortBy } from 'lodash';
 import { utility } from '@thatconference/api';
+import dayjs from 'dayjs';
+import eventStore from './event';
+import constants from '../../constants';
 
 const dlog = debug('that:api:events:datasources:firebase:events:partner');
 
@@ -8,6 +11,9 @@ function partnerCollection(dbInstance) {
   dlog('instance created');
 
   const eventDateForge = utility.firestoreDateForge.events;
+  const dateForge = utility.firestoreDateForge.entityDateForge;
+  const fields = ['expirationDate'];
+  const eventPartnerDateForge = dateForge({ fields });
   const collectionName = 'events';
   const subCollectionName = 'partners';
 
@@ -68,36 +74,58 @@ function partnerCollection(dbInstance) {
   }
 
   async function add(eventId, partnerId, partner) {
-    dlog('add');
+    dlog('add partner %s to event %s', partnerId, eventId);
+
+    const event = await eventStore(dbInstance).get(eventId);
+    if (!event) throw new Error(`event with id ${eventId} not found`);
+    const newEventPartner = {
+      ...partner,
+      eventId,
+      partnerId,
+      expirationDate: dayjs(event.endDate)
+        .add(constants.THAT.PARTNERS.SPONSOR_EXPIRATION_DAYS, 'day')
+        .toDate(),
+    };
 
     const ref = dbInstance.doc(
       `${collectionName}/${eventId}/${subCollectionName}/${partnerId}`,
     );
 
-    await ref.set(partner, { merge: true });
+    await ref.set(newEventPartner, { merge: false });
     const updatedDoc = await ref.get();
-
-    return {
-      id: ref.id,
+    const result = {
+      id: updatedDoc.id,
       ...updatedDoc.data(),
     };
+
+    return eventPartnerDateForge(result);
   }
 
   function update(eventId, partnerId, partner) {
-    dlog('update');
+    dlog('update partner %s under event %s', partnerId, eventId);
+    const updatePartner = {
+      ...partner,
+      eventId,
+      partnerId,
+    };
 
     const documentRef = dbInstance.doc(
       `${collectionName}/${eventId}/${subCollectionName}/${partnerId}`,
     );
 
-    return documentRef.update(partner).then(res => ({
-      id: partnerId,
-      ...partner,
-    }));
+    return documentRef.update(updatePartner).then(() =>
+      documentRef.get().then(doc => {
+        const r = {
+          id: doc.id,
+          ...doc.data(),
+        };
+        return eventPartnerDateForge(r);
+      }),
+    );
   }
 
   function remove(eventId, partnerId) {
-    dlog('remove');
+    dlog('remove partner %s from event %s', partnerId, eventId);
     const documentRef = dbInstance.doc(
       `${collectionName}/${eventId}/${subCollectionName}/${partnerId}`,
     );

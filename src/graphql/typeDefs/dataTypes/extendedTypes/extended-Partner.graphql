@@ -13,7 +13,8 @@ extend type Partner @key(fields: "id") {
   placement: Int!
   "sponsorship level. Access through Event query ONLY!"
   level: PartnershipLevel!
-
   "physical location of a partners booth. Access through Event query ONLY!"
   location: String
+  "The date at which the partner's sponsorship expires for this event. Access through Event query ONLY!"
+  expirationDate: Date
 }

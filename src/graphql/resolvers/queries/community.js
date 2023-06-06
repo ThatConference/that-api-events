@@ -70,6 +70,9 @@ export const fieldResolvers = {
       let eventResults;
       if (filter === 'ACTIVE') {
         eventResults = eventStore(firestore).findActiveByCommunitySlug(slug);
+      } else if (filter === 'ACTIVE_PARTNER') {
+        eventResults =
+          eventStore(firestore).findActiveForPartnerByCommunitySlug(slug);
       } else if (filter === 'FEATURED') {
         eventResults = eventStore(firestore).findFeaturedByCommunitySlug(slug);
       } else if (filter === 'PAST') {

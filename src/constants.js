@@ -9,4 +9,8 @@ constants.THAT.USER_EVENTS = {
   SPEAKER_ENROLLMENT_COMPLETE: 'speakerEnrollmentComplete',
 };
 
+constants.THAT.PARTNERS = {
+  SPONSOR_EXPIRATION_DAYS: 30,
+};
+
 export default constants;

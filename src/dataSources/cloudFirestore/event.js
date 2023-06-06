@@ -1,5 +1,7 @@
 import debug from 'debug';
 import { utility } from '@thatconference/api';
+import dayjs from 'dayjs';
+import constants from '../../constants';
 
 const dlog = debug('that:api:events:datasources:firebase:event');
 const eventDateForge = utility.firestoreDateForge.events;
@@ -151,6 +153,28 @@ const event = dbInstance => {
       .where('isActive', '==', true)
       .where('community', '==', slimslug)
       .where('endDate', '>=', new Date())
+      .get();
+
+    return docs.map(e => {
+      const r = {
+        id: e.id,
+        ...e.data(),
+      };
+      return eventDateForge(r);
+    });
+  };
+
+  const findActiveForPartnerByCommunitySlug = async slug => {
+    const slimslug = slug.trim().toLowerCase();
+    const targetDate = dayjs()
+      .subtract(constants.THAT.PARTNERS.SPONSOR_EXPIRATION_DAYS, 'days')
+      .toDate();
+    dlog('findActiveForPartnerByCommunitySlug %s', slimslug);
+
+    const { docs } = await eventsCol
+      .where('isActive', '==', true)
+      .where('community', '==', slimslug)
+      .where('endDate', '>=', targetDate)
       .get();
 
     return docs.map(e => {
@@ -326,6 +350,7 @@ const event = dbInstance => {
     findBySlug,
     update,
     findActiveByCommunitySlug,
+    findActiveForPartnerByCommunitySlug,
     findFeaturedByCommunitySlug,
     findAllByCommunitySlug,
     findFutureByCommunitySlug,
