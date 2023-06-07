@@ -4,7 +4,7 @@ enum CommunityEventsFilter {
   ALL
   "Active events only, have isActive bit true, endDate > Now"
   ACTIVE
-  "Adds partner expiration days to event endDate for active list of partners"
+  "Adds partner expiration days to event endDate for active list of partners by event"
   ACTIVE_PARTNER
   "Featured events, isFeatured bit, by definition are also active"
   FEATURED
