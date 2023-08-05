@@ -116,7 +116,7 @@ function createUserContext(req, res, next) {
 
 function getVersion(req, res) {
   dlog('method %s, defaultVersion %s', req.method, defaultVersion);
-  return res.json({ defaultVersion });
+  return res.json({ version: defaultVersion });
 }
 
 function failure(err, req, res, next) {
@@ -126,7 +126,6 @@ function failure(err, req, res, next) {
   res.set('Content-Type', 'application/json').status(500).json(err);
 }
 
-api.use('/version', getVersion);
 api.use(
   Sentry.Handlers.requestHandler(),
   cors(),
@@ -135,6 +134,7 @@ api.use(
   sentryMark,
   createUserContext,
 );
+api.use('/version', getVersion);
 
 const { graphQlServer, createContext } = graphServerParts;
 
