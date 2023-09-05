@@ -111,6 +111,9 @@ type Event @key(fields: "id") {
   "date/time ticket sales stop"
   ticketsOnSaleUntil: Date
 
+  "date/time refunds are no longer honored."
+  ticketRefundEndDate: Date
+
   "When true a ticket is required to mutate session in this event"
   isTicketRequiredToMutate: Boolean
 
