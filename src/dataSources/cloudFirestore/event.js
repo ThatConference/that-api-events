@@ -306,14 +306,16 @@ const event = dbInstance => {
     statuses,
     agreedToSpeak,
     acceptedRoomBenefit,
+    isSponsorSpeaker,
   }) {
     dlog('getting accepted speakers for event %s', eventId);
     dlog(
-      'getAcceptedSpeakersForEvent: %s,%s,%s,%s',
+      'getAcceptedSpeakersForEvent: %s,%s,%s,%s,%s',
       eventId,
       platform,
       statuses,
       agreedToSpeak,
+      isSponsorSpeaker,
     );
 
     let query = eventsCol
@@ -333,6 +335,9 @@ const event = dbInstance => {
     }
     if (acceptedRoomBenefit !== undefined && acceptedRoomBenefit !== null) {
       query = query.where('acceptRoomBenefit', '==', acceptedRoomBenefit);
+    }
+    if (isSponsorSpeaker !== undefined && isSponsorSpeaker !== null) {
+      query = query.where('isSponsorSpeaker', '==', isSponsorSpeaker);
     }
 
     return query

@@ -13,6 +13,12 @@ type AcceptedSpeaker {
   reason: String
   "platform presenting on (ON/AT)"
   platform: EventPlatform!
+  """
+  Speaker accepted through sponsorship
+  This field doesn't exist prior to tx/2024
+  A null value means unknown if sponsored speaker
+  """
+  isSponsorSpeaker: Boolean
   "Current status of Accepted Speaker enrollment"
   status: EventAcceptedSpeakerStatus!
   "Date/Time the speaker enrollment was responded to"

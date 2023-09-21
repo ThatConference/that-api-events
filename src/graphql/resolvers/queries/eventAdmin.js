@@ -12,14 +12,20 @@ export const fieldResolvers = {
       { dataSources: { firestore } },
     ) => {
       dlog('eventAdmin acceptedSpeakers resolver called');
-      const { platform, statuses, agreedToSpeak, acceptedRoomBenefit } =
-        filters;
+      const {
+        platform,
+        statuses,
+        agreedToSpeak,
+        acceptedRoomBenefit,
+        isSponsorSpeaker,
+      } = filters;
       return eventStore(firestore).getAcceptedSpeakersForEvent({
         eventId,
         platform,
         statuses,
         agreedToSpeak,
         acceptedRoomBenefit,
+        isSponsorSpeaker,
       });
     },
   },
