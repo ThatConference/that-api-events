@@ -1,6 +1,7 @@
 """
 Use the following values to filter the list of accepted speakers return
 leave blank to accept all values of that type
+Use {} to set no filters
 """
 input AcceptedSpeakersFiltersInput {
   "The platform presenting on (ON/AT)"
@@ -11,4 +12,10 @@ input AcceptedSpeakersFiltersInput {
   agreedToSpeak: Boolean
   "Has the speaker returned their room benefit. False is the initial value when not_started"
   acceptedRoomBenefit: Boolean
+  """
+  Filter by only is or is not a sponsor speaker
+  Events prior to tx/2024 will not return results when this filter is used.
+  This field did't exist prior to tx/2024
+  """
+  isSponsorSpeaker: Boolean
 }
