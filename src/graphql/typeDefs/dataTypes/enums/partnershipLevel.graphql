@@ -8,7 +8,7 @@ enum PartnershipLevel {
   "Ranger"
   RANGER
   "Trailblazer"
-  TRAOBLAZER
+  TRAILBLAZER
   "Cub"
   CUB
   "Patron"
