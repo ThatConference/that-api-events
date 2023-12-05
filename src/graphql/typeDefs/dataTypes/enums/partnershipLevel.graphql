@@ -5,6 +5,10 @@ enum PartnershipLevel {
   EXPLORER
   "Scout"
   SCOUT
+  "Ranger"
+  RANGER
+  "Trailblazer"
+  TRAOBLAZER
   "Cub"
   CUB
   "Patron"
