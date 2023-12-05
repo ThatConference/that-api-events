@@ -35,6 +35,8 @@ function partnerCollection(dbInstance) {
       'EXPLORER',
       'SCOUT',
       'CUB',
+      'RANGER',
+      'TRAILBLAZER',
       'PATRON',
       'CORPORATE_PARTNER',
       'PARTNER',
