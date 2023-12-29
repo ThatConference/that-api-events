@@ -46,6 +46,14 @@ const event = dbInstance => {
 
     if (newEvent.website) scrubbedEvent.website = newEvent.website.href;
 
+    if (newEvent.logo) scrubbedEvent.logo = newEvent.logo.href;
+
+    if (newEvent.checkoutSuccess)
+      scrubbedEvent.checkoutSuccess = newEvent.checkoutSuccess.href;
+
+    if (newEvent.checkoutCancel)
+      scrubbedEvent.checkoutCancel = newEvent.checkoutCancel.href;
+
     const newDocument = await eventsCol.add(scrubbedEvent);
 
     return {
@@ -140,6 +148,14 @@ const event = dbInstance => {
     }
 
     if (eventInput.website) scrubbedEvent.website = eventInput.website.href;
+
+    if (eventInput.logo) scrubbedEvent.logo = eventInput.logo.href;
+
+    if (eventInput.checkoutSuccess)
+      scrubbedEvent.checkoutSuccess = eventInput.checkoutSuccess.href;
+
+    if (eventInput.checkoutCancel)
+      scrubbedEvent.checkoutCancel = eventInput.checkoutCancel.href;
 
     const docRef = dbInstance.doc(`${collectionName}/${id}`);
 
